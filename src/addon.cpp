@@ -34,7 +34,6 @@ public:
 
 		NODE_SET_PROTOTYPE_METHOD(t, "update", Update);
 		NODE_SET_PROTOTYPE_METHOD(t, "digest", Digest);
-		NODE_SET_PROTOTYPE_METHOD(t, "hexdigest", Hexdigest);
 
 		target->Set(String::NewSymbol("SHA3Hash"), t->GetFunction());
 	}
@@ -46,12 +45,17 @@ public:
 		int32_t hashlen;
 
 		hashlen = args[0]->IsUndefined() ? 512 : args[0]->Int32Value();
+		if (hashlen == 0) {
+			Local<Value> exception = Exception::TypeError(String::New("Unsupported hash length"));
+			return ThrowException(exception);
+		}
+
 		obj = new SHA3Hash();
+		obj->Wrap(args.This());
 		obj->bitlen = hashlen;
 		::Init(&obj->state, hashlen);
-		obj->Wrap(args.This());
 
-		return args.This();
+		return scope.Close(args.This());
 	}
 
 	static Handle<Value>
@@ -64,7 +68,7 @@ public:
 		ssize_t len = DecodeBytes(args[0], enc);
 		
 		if (len < 0) {
-			Local<Value> exception = Exception::TypeError(String::New("Bad argument"));
+			Local<Value> exception = Exception::Error(String::New("Bad argument"));
 			return ThrowException(exception);
 		}
 
@@ -81,7 +85,7 @@ public:
 			delete[] buf;
 		}
 
-		return Undefined();
+		return scope.Close(args.This());
 	}
 
 	static Handle<Value>
@@ -93,22 +97,22 @@ public:
 
 		memcpy(&state2, &obj->state, sizeof(hashState));
 		Final(&state2, digest);
-		return String::New((const char *) digest, obj->bitlen / 8);
-	}
 
-	static Handle<Value>
-	Hexdigest(const Arguments &args) {
-		HandleScope scope;
-		SHA3Hash *obj = ObjectWrap::Unwrap<SHA3Hash>(args.This());
-		hashState state2;
-		unsigned char digest[MAX_DIGEST_SIZE];
-		char hexdigest[MAX_DIGEST_SIZE * 2];
+		Local<Value> outString;
+		enum encoding enc = ParseEncoding(args[0], BINARY);
+		if (enc == HEX) {
+			// Hex encoding
+			char hexdigest[MAX_DIGEST_SIZE * 2];
+			toHex((const char *) digest, obj->bitlen / 8, hexdigest);
+			outString = Encode(hexdigest, obj->bitlen / 4, BINARY);
+		} else if (enc == BINARY /* || enc == BUFFER */) {
+			outString = Encode(digest, obj->bitlen / 8, enc);
+		} else {
+			Local<Value> exception = Exception::Error(String::New("Unsupported output encoding"));
+			return ThrowException(exception);
+		}
 
-		memcpy(&state2, &obj->state, sizeof(hashState));
-		Final(&state2, digest);
-		toHex((const char *) digest, obj->bitlen / 8, hexdigest);
-
-		return String::New((const char *) hexdigest, obj->bitlen / 4);
+		return scope.Close(outString);
 	}
 };
 
