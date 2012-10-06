@@ -16,6 +16,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <stdio.h>
 
+namespace Node_SHA3 {
+
 void displaySetIntermediateValueFile(FILE *f);
 void displaySetLevel(int level);
 void displayBytes(int level, const char *text, const unsigned char *bytes, unsigned int size);
@@ -25,5 +27,7 @@ void displayStateAs32bitWords(int level, const char *text, const unsigned int *s
 void displayStateAs64bitWords(int level, const char *text, const unsigned long long int *state);
 void displayRoundNumber(int level, unsigned int i);
 void displayText(int level, const char *text);
+
+} // namespace
 
 #endif

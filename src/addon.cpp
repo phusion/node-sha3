@@ -5,9 +5,7 @@
 #include <cassert>
 #include <cstring>
 
-extern "C" {
-	#include "KeccakNISTInterface.h"
-}
+#include "KeccakNISTInterface.h"
 
 #define MAX_DIGEST_SIZE 64
 #define ASSERT_IS_STRING_OR_BUFFER(val) \
@@ -17,6 +15,7 @@ extern "C" {
 
 using namespace node;
 using namespace v8;
+using namespace Node_SHA3;
 
 static void toHex(const char *data_buf, size_t size, char *output);
 

@@ -27,6 +27,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define ALIGN
 #endif
 
+namespace Node_SHA3 {
+
 ALIGN typedef struct spongeStateStruct {
     ALIGN unsigned char state[KeccakPermutationSizeInBytes];
     ALIGN unsigned char dataQueue[KeccakMaximumRateInBytes];
@@ -72,5 +74,7 @@ int Absorb(spongeState *state, const unsigned char *data, unsigned long long dat
   * @return Zero if successful, 1 otherwise.
   */
 int Squeeze(spongeState *state, unsigned char *output, unsigned long long outputLength);
+
+} // namespace
 
 #endif

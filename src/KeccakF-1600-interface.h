@@ -16,6 +16,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include "KeccakF-1600-int-set.h"
 
+namespace Node_SHA3 {
+
 void KeccakInitialize( void );
 void KeccakInitializeState(unsigned char *state);
 void KeccakPermutation(unsigned char *state);
@@ -42,5 +44,7 @@ void KeccakAbsorb(unsigned char *state, const unsigned char *data, unsigned int 
 void KeccakExtract1024bits(const unsigned char *state, unsigned char *data);
 #endif
 void KeccakExtract(const unsigned char *state, unsigned char *data, unsigned int laneCount);
+
+} // namespace
 
 #endif

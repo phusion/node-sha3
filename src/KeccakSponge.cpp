@@ -18,6 +18,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "displayIntermediateValues.h"
 #endif
 
+namespace Node_SHA3 {
+
 int InitSponge(spongeState *state, unsigned int rate, unsigned int capacity)
 {
     if (rate+capacity != 1600)
@@ -264,3 +266,5 @@ int Squeeze(spongeState *state, unsigned char *output, unsigned long long output
     }
     return 0;
 }
+
+} // namespace

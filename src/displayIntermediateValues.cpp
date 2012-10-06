@@ -15,6 +15,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "displayIntermediateValues.h"
 #include "KeccakNISTInterface.h"
 
+namespace Node_SHA3 {
+
 FILE *intermediateValueFile = 0;
 int displayLevel = 0;
 
@@ -115,3 +117,5 @@ void displayText(int level, const char *text)
         fprintf(intermediateValueFile, "\n");
     }
 }
+
+} // namespace

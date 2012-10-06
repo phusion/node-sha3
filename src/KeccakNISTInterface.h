@@ -16,6 +16,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include "KeccakSponge.h"
 
+namespace Node_SHA3 {
+
 typedef unsigned char BitSequence;
 typedef unsigned long long DataLength;
 typedef enum { SUCCESS = 0, FAIL = 1, BAD_HASHLEN = 2 } HashReturn;
@@ -66,5 +68,7 @@ HashReturn Final(hashState *state, BitSequence *hashval);
   * @return SUCCESS if successful, BAD_HASHLEN if the value of hashbitlen is incorrect.
   */
 HashReturn Hash(int hashbitlen, const BitSequence *data, DataLength databitlen, BitSequence *hashval);
+
+} // namespace
 
 #endif

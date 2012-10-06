@@ -18,6 +18,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "KeccakNISTInterface.h"
 #include "KeccakF-1600-interface.h"
 
+namespace Node_SHA3 {
+
 typedef unsigned char UINT8;
 typedef unsigned long long int UINT64;
 
@@ -298,3 +300,5 @@ void KeccakExtract(const unsigned char *state, unsigned char *data, unsigned int
 {
     memcpy(data, state, laneCount*8);
 }
+
+} // namespace
