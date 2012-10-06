@@ -36,6 +36,15 @@ Calculates the digest of all of the passed data to be hashed. The encoding can b
 
 Note: unlike `crypto.Hash`, a `SHA3Hash` object _can_ still be used after the `digest()` method been called.
 
+## Running the test suite
+
+Run the test suite as follows:
+
+    python test/generate_tests.py > test/test_vectors.js
+    node test/test_vectors.js
+
+The test suite is automatically generated from Keccak's reference test suite.
+
 ## Warning
 
 Do not use SHA-3 for hashing passwords. Do not even use SHA-3 + salt for hashing passowords. Use a [slow hash](http://codahale.com/how-to-safely-store-a-password/) instead.
