@@ -12,6 +12,7 @@
     "type": "git",
     "url": "git://github.com/phusion/node-sha3.git"
   },
+  "main": "build/Release/sha3",
   "scripts": {
     "install": "node-gyp rebuild"
   },

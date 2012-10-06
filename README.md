@@ -6,7 +6,7 @@ This Node.js extension implements the SHA-3 ([Keccak](http://keccak.noekeon.org/
 
 ## Installation
 
-TODO: make NPM package
+    npm install sha3
 
 ## Usage
 
