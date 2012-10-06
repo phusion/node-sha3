@@ -50,3 +50,7 @@ The test suite is automatically generated from Keccak's reference test suite.
 ## Warning
 
 Do not use SHA-3 for hashing passwords. Do not even use SHA-3 + salt for hashing passowords. Use a [slow hash](http://codahale.com/how-to-safely-store-a-password/) instead.
+
+## See also
+
+[Digest::SHA3 for Ruby](https://github.com/phusion/digest-sha3-ruby)
