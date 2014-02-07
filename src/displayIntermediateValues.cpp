@@ -112,7 +112,7 @@ void displayRoundNumber(int level, unsigned int i)
 void displayText(int level, const char *text)
 {
     if ((intermediateValueFile) && (level <= displayLevel)) {
-        fprintf(intermediateValueFile, text);
+        fprintf(intermediateValueFile, "%s", text);
         fprintf(intermediateValueFile, "\n");
         fprintf(intermediateValueFile, "\n");
     }
