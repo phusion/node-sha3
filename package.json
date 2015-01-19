@@ -23,9 +23,12 @@
   "author": {
     "name": "Hongli Lai (Phusion)",
     "email": "hongli@phusion.nl"
-    },
+  },
   "license": "MIT",
   "engines": {
     "node": ">= 0.8"
+  },
+  "dependencies": {
+    "nan": "^1.5.1"
   }
 }

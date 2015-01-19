@@ -8,6 +8,9 @@
         "src/KeccakF-1600-reference.cpp",
         "src/KeccakNISTInterface.cpp",
         "src/KeccakSponge.cpp"
+      ],
+      "include_dirs": [
+          "<!(node -e \"require('nan')\")"
       ]
     }
   ]
