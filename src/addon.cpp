@@ -11,7 +11,7 @@
 #define MAX_DIGEST_SIZE 64
 #define ASSERT_IS_STRING_OR_BUFFER(val) \
 	if (!val->IsString() && !Buffer::HasInstance(val)) { \
-		return ThrowException(Exception::TypeError(String::New("Not a string or buffer"))); \
+		return NanThrowError(Exception::TypeError(NanNew<String>("Not a string or buffer"))); \
 	}
 
 using namespace node;
@@ -27,27 +27,27 @@ public:
 
 	static void
 	Initialize(Handle<Object> target) {
-		HandleScope scope;
-		Local<FunctionTemplate> t = FunctionTemplate::New(New);
+		NanScope();
+		Local<FunctionTemplate> t = NanNew<FunctionTemplate>(New);
 		t->InstanceTemplate()->SetInternalFieldCount(1);
-		t->SetClassName(String::NewSymbol("SHA3Hash"));
+		t->SetClassName(NanNew<String>("SHA3Hash"));
 
 		NODE_SET_PROTOTYPE_METHOD(t, "update", Update);
 		NODE_SET_PROTOTYPE_METHOD(t, "digest", Digest);
 
-		target->Set(String::NewSymbol("SHA3Hash"), t->GetFunction());
+		target->Set(NanNew<String>("SHA3Hash"), t->GetFunction());
 	}
 
-	static Handle<Value>
-	New(const Arguments &args) {
-		HandleScope scope;
+	static
+	NAN_METHOD(New) {
+		NanScope();
 		SHA3Hash *obj;
 		int32_t hashlen;
 
 		hashlen = args[0]->IsUndefined() ? 512 : args[0]->Int32Value();
 		if (hashlen == 0) {
-			Local<Value> exception = Exception::TypeError(String::New("Unsupported hash length"));
-			return ThrowException(exception);
+			Local<Value> exception = Exception::TypeError(NanNew<String>("Unsupported hash length"));
+			return NanThrowError(exception);
 		}
 
 		obj = new SHA3Hash();
@@ -55,21 +55,21 @@ public:
 		obj->bitlen = hashlen;
 		::Init(&obj->state, hashlen);
 
-		return scope.Close(args.This());
+		NanReturnValue(args.This());
 	}
 
-	static Handle<Value>
-	Update(const Arguments &args) {
-		HandleScope scope;
+	static
+	NAN_METHOD(Update) {
+		NanScope();
 		SHA3Hash *obj = ObjectWrap::Unwrap<SHA3Hash>(args.This());
 
 		ASSERT_IS_STRING_OR_BUFFER(args[0]);
 		enum encoding enc = ParseEncoding(args[1]);
 		ssize_t len = DecodeBytes(args[0], enc);
-		
+
 		if (len < 0) {
-			Local<Value> exception = Exception::Error(String::New("Bad argument"));
-			return ThrowException(exception);
+			Local<Value> exception = Exception::Error(NanNew<String>("Bad argument"));
+			return NanThrowError(exception);
 		}
 
 		if (Buffer::HasInstance(args[0])) {
@@ -85,12 +85,12 @@ public:
 			delete[] buf;
 		}
 
-		return scope.Close(args.This());
+		NanReturnValue(args.This());
 	}
 
-	static Handle<Value>
-	Digest(const Arguments &args) {
-		HandleScope scope;
+	static
+	NAN_METHOD(Digest) {
+		NanScope();
 		SHA3Hash *obj = ObjectWrap::Unwrap<SHA3Hash>(args.This());
 		hashState state2;
 		unsigned char digest[MAX_DIGEST_SIZE];
@@ -108,11 +108,11 @@ public:
 		} else if (enc == BINARY /* || enc == BUFFER */) {
 			outString = Encode(digest, obj->bitlen / 8, enc);
 		} else {
-			Local<Value> exception = Exception::Error(String::New("Unsupported output encoding"));
-			return ThrowException(exception);
+			Local<Value> exception = Exception::Error(NanNew<String>("Unsupported output encoding"));
+			return NanThrowError(exception);
 		}
 
-		return scope.Close(outString);
+		NanReturnValue(outString);
 	}
 };
 
@@ -126,7 +126,7 @@ static const char hex_chars[] = {
 static void
 toHex(const char *data_buf, size_t size, char *output) {
 	size_t i;
-	
+
 	for (i = 0; i < size; i++) {
 		output[i * 2] = hex_chars[(unsigned char) data_buf[i] / 16];
 		output[i * 2 + 1] = hex_chars[(unsigned char) data_buf[i] % 16];
