@@ -17,6 +17,7 @@ def generate():
 
 var assert = require('assert');
 var SHA3 = require('./../build/Release/sha3');
+var inst;
 
 """
 
