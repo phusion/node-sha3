@@ -46,9 +46,15 @@ public:
 		int32_t hashlen;
 
 		hashlen = args[0]->IsUndefined() ? 512 : args[0]->Int32Value();
-		if (hashlen < 1) {
-			Local<Value> exception = Exception::TypeError(NanNew<String>("Unsupported hash length"));
-			return NanThrowError(exception);
+		switch (hashlen) {
+			case 224:
+			case 256:
+			case 384:
+			case 512:
+				break;
+			default:
+				Local<Value> exception = Exception::TypeError(NanNew<String>("Unsupported hash length"));
+				return NanThrowError(exception);
 		}
 
 		if (args.IsConstructCall()) {
