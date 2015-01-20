@@ -1,60 +1,66 @@
 var assert = require('assert');
 var util   = require('util');
-var sha3   = require('../').SHA3Hash;
-
-console.error(util.inspect((new sha3()).prototype));
-
+var SHA3 = require('./../build/Release/SHA3').SHA3Hash;
 
 describe('SHA3', function(){
 
   describe('constructor', function(){
     it('allows no hash length to be specified', function(){
       assert.doesNotThrow(function(){
-        new sha3();
+        new SHA3();
       });
     });
 
     it('allows omitting the new keyword', function(){
       assert.doesNotThrow(function(){
-        sha3();
+        SHA3();
       });
     });
 
     it('accepts a number to its constructor', function(){
       assert.doesNotThrow(function(){
-        new sha3(224);
+        new SHA3(224);
+        new SHA3(256);
+        new SHA3(384);
+        new SHA3(512);
       });
     });
 
     it('throws an error with an integer hashlen of 0', function(){
       assert.throws(function(){
-        new sha3(0);
+        new SHA3(0);
+      }, "Unsupported hash length");
+    });
+
+    it('throws an error with an integer which is not a supported hash length', function(){
+      assert.throws(function(){
+        new SHA3(225);
       }, "Unsupported hash length");
     });
 
     it('throws an error with any non-positive integer value', function(){
       assert.throws(function(){
-        new sha3('hi');
+        new SHA3('hi');
       }, "Unsupported hash length");
       assert.throws(function(){
-        new sha3(null);
+        new SHA3(null);
       }, "Unsupported hash length");
       assert.throws(function(){
-        new sha3(-1);
+        new SHA3(-1);
       }, "Unsupported hash length");
     });
   });
 
   describe('#update()', function(){
     it('accepts a string as input', function(){
-      var sha = new sha3(224);
+      var sha = new SHA3(224);
       assert.doesNotThrow(function(){
         sha.update('some string value');
       });
     });
 
     it('accepts a buffer as input', function(){
-      var sha = new sha3(224);
+      var sha = new SHA3(224);
       var buffer = new Buffer('aloha');
       assert.doesNotThrow(function(){
         sha.update(buffer);
@@ -62,7 +68,7 @@ describe('SHA3', function(){
     });
 
     it('does not accept any other types', function(){
-      var sha = new sha3(224);
+      var sha = new SHA3(224);
       [1, 3.14, {}, []].forEach(function(arg){
         assert.throws(function(){
           sha.update(arg);
@@ -72,9 +78,36 @@ describe('SHA3', function(){
   });
 
   describe('#digest()', function(){
-    it('should return -1 when the value is not present', function(){
-      assert.equal(-1, [1,2,3].indexOf(5));
-      assert.equal(-1, [1,2,3].indexOf(0));
+    it('supports hex encoding', function(){
+      var result = "0eab42de4c3ceb9235fc91acffe746b29c29a8c366b7c60e4e67c466f36a4304c00" +
+                   "fa9caf9d87976ba469bcbe06713b435f091ef2769fb160cdab33d3670680e";
+      assert.equal(result, new SHA3().digest('hex'));
+    });
+
+    it('supports binary encoding', function(){
+      var binary = new SHA3().digest('binary');
+      assert.ok(binary);
+      assert.ok(binary.length > 0);
+    });
+
+    it('defaults to binary encoding', function(){
+      var binary = new SHA3().digest();
+      assert.ok(binary);
+      assert.ok(binary.length > 0);
+    });
+
+    it('does not support any other encoding', function(){
+      assert.throws(function(){
+        new SHA3().digest('buffer');
+      }, "Unsupported output encoding");
+    });
+
+    it('incorporates the updates into the output', function(){
+      var sha = new SHA3(224);
+      sha.digest('hex');
+      // assert.equal("blah", sha.digest('hex'));
+      // sha.update('some value');
+      // assert.equal("blah2", sha.digest('hex'));
     });
   });
 });
