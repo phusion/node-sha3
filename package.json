@@ -14,7 +14,8 @@
   },
   "main": "build/Release/sha3",
   "scripts": {
-    "install": "node-gyp rebuild"
+    "install": "node-gyp rebuild",
+    "test": "python test/generate_tests.py > test/test_vectors.js && node test/test_vectors.js"
   },
   "gypfile": true,
   "directories": {
@@ -23,9 +24,12 @@
   "author": {
     "name": "Hongli Lai (Phusion)",
     "email": "hongli@phusion.nl"
-    },
+  },
   "license": "MIT",
   "engines": {
     "node": ">= 0.8"
+  },
+  "dependencies": {
+    "nan": "^1.5.1"
   }
 }
