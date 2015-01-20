@@ -46,9 +46,28 @@ describe('SHA3', function(){
   });
 
   describe('#update()', function(){
-    it('should return -1 when the value is not present', function(){
-      assert.equal(-1, [1,2,3].indexOf(5));
-      assert.equal(-1, [1,2,3].indexOf(0));
+    it('accepts a string as input', function(){
+      var sha = new sha3(224);
+      assert.doesNotThrow(function(){
+        sha.update('some string value');
+      });
+    });
+
+    it('accepts a buffer as input', function(){
+      var sha = new sha3(224);
+      var buffer = new Buffer('aloha');
+      assert.doesNotThrow(function(){
+        sha.update(buffer);
+      });
+    });
+
+    it('does not accept any other types', function(){
+      var sha = new sha3(224);
+      [1, 3.14, {}, []].forEach(function(arg){
+        assert.throws(function(){
+          sha.update(arg);
+        }, "Not a string or buffer");
+      });
     });
   });
 
