@@ -15,7 +15,7 @@
   "main": "build/Release/sha3",
   "scripts": {
     "install": "node-gyp rebuild",
-    "test": "python test/generate_tests.py > test/test_vectors.js && node test/test_vectors.js"
+    "test": "python test/generate_tests.py > test/test_vectors.js && node test/test_vectors.js && mocha test/unit_tests.js"
   },
   "gypfile": true,
   "directories": {
@@ -31,5 +31,8 @@
   },
   "dependencies": {
     "nan": "^1.5.1"
+  },
+  "devDependencies": {
+    "mocha": "^2.1.0"
   }
 }
