@@ -35,6 +35,7 @@ public:
 		NODE_SET_PROTOTYPE_METHOD(t, "update", Update);
 		NODE_SET_PROTOTYPE_METHOD(t, "digest", Digest);
 
+		NanAssignPersistent(constructor, t->GetFunction());
 		target->Set(NanNew<String>("SHA3Hash"), t->GetFunction());
 	}
 
@@ -50,12 +51,20 @@ public:
 			return NanThrowError(exception);
 		}
 
-		obj = new SHA3Hash();
-		obj->Wrap(args.This());
-		obj->bitlen = hashlen;
-		::Init(&obj->state, hashlen);
-
-		NanReturnValue(args.This());
+		if (args.IsConstructCall()) {
+			// Invoked as constructor.
+			obj = new SHA3Hash();
+			obj->Wrap(args.This());
+			obj->bitlen = hashlen;
+			::Init(&obj->state, hashlen);
+			NanReturnValue(args.This());
+		} else {
+			// Invoked as a plain function.
+			const int argc = 1;
+			Local<Value> argv[argc] = { NanNew<Number>(hashlen) };
+			Local<Function> cons = NanNew<Function>(constructor);
+			NanReturnValue(cons->NewInstance(argc, argv));
+		}
 	}
 
 	static
@@ -114,7 +123,12 @@ public:
 
 		NanReturnValue(outString);
 	}
+
+private:
+	static Persistent<Function> constructor;
 };
+
+Persistent<Function> SHA3Hash::constructor;
 
 static const char hex_chars[] = {
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
