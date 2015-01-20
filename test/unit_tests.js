@@ -104,10 +104,18 @@ describe('SHA3', function(){
 
     it('incorporates the updates into the output', function(){
       var sha = new SHA3(224);
-      sha.digest('hex');
-      // assert.equal("blah", sha.digest('hex'));
-      // sha.update('some value');
-      // assert.equal("blah2", sha.digest('hex'));
+      assert.equal('f71837502ba8e10837bdd8d365adb85591895602fc552b48b7390abd', sha.digest('hex'));
+      sha.update('some value');
+      assert.equal('c6e8a28b9c677c4f5a1098cbc07454cdf7ba7dc4ee600a4655bec0a6', sha.digest('hex'));
     });
+  });
+
+  describe('chaining', function(){
+    it('can chain', function(){
+      assert.equal(
+        '76a781712088f94b4f6ca4962f886cac1158bc2f79eabade5ff76d14',
+        SHA3(224).update('vlad').digest('hex')
+      );
+    })
   });
 });
