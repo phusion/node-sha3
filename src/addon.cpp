@@ -57,7 +57,7 @@ public:
 			obj->Wrap(args.This());
 			obj->bitlen = hashlen;
 			::Init(&obj->state, hashlen);
-			NanReturnValue(args.This());
+			NanReturnValue(obj);
 		} else {
 			// Invoked as a plain function.
 			const int argc = 1;
