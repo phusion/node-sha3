@@ -46,7 +46,7 @@ public:
 		int32_t hashlen;
 
 		hashlen = args[0]->IsUndefined() ? 512 : args[0]->Int32Value();
-		if (hashlen == 0) {
+		if (hashlen < 1) {
 			Local<Value> exception = Exception::TypeError(NanNew<String>("Unsupported hash length"));
 			return NanThrowError(exception);
 		}
