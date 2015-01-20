@@ -4,6 +4,8 @@ This Node.js extension implements the SHA-3 ([Keccak](http://keccak.noekeon.org/
 
 **This repository is currently unmaintained. If you're interested in taking over maintenance, please open a Github issue.**
 
+[![Build Status](https://travis-ci.org/phusion/node-sha3.svg?branch=master)](https://travis-ci.org/phusion/node-sha3)
+
 [<img src="http://www.phusion.nl/assets/logo.png">](http://www.phusion.nl/)
 
 ## Installation
@@ -44,10 +46,11 @@ Note: unlike `crypto.Hash`, a `SHA3Hash` object _can_ still be used after the `d
 
 Run the test suite as follows:
 
-    python test/generate_tests.py > test/test_vectors.js
-    node test/test_vectors.js
+    npm test
 
 The test suite is automatically generated from Keccak's reference test suite.
+It requires that you have Python 2.7 installed and available via the
+`python` executable.
 
 ## Warning
 
