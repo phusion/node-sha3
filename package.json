@@ -27,10 +27,11 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">= 0.8"
+    "node": ">= 0.8",
+    "iojs": ">= 1.0"
   },
   "dependencies": {
-    "nan": "^1.5.1"
+    "nan": "^2.0.5"
   },
   "devDependencies": {
     "mocha": "^2.1.0"
