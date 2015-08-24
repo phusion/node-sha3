@@ -115,13 +115,13 @@ public:
 		Final(&state2, digest);
 
 		Local<Value> outString;
-		enum Nan::Encoding enc = static_cast<Nan::Encoding>(ParseEncoding(Isolate::GetCurrent(), info[0], node::encoding::BINARY));
-		if (enc == Nan::Encoding::HEX) {
+		enum Nan::Encoding enc = static_cast<Nan::Encoding>(ParseEncoding(Isolate::GetCurrent(), info[0], node::BINARY));
+		if (enc == Nan::HEX) {
 			// Hex encoding
 			char hexdigest[MAX_DIGEST_SIZE * 2];
 			toHex((const char *) digest, obj->bitlen / 8, hexdigest);
-			outString = Nan::Encode(hexdigest, obj->bitlen / 4, Nan::Encoding::BINARY);
-		} else if (enc == Nan::Encoding::BINARY /* || enc == BUFFER */) {
+			outString = Nan::Encode(hexdigest, obj->bitlen / 4, Nan::BINARY);
+		} else if (enc == Nan::BINARY /* || enc == BUFFER */) {
 			outString = Nan::Encode(digest, obj->bitlen / 8, enc);
 		} else {
 			return Nan::ThrowError("Unsupported output encoding");
