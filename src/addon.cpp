@@ -82,7 +82,11 @@ public:
 		SHA3Hash *obj = ObjectWrap::Unwrap<SHA3Hash>(info.This());
 
 		ASSERT_IS_STRING_OR_BUFFER(info[0]);
-		enum Nan::Encoding enc = static_cast<Nan::Encoding>(ParseEncoding(Isolate::GetCurrent(), info[1]));
+#if NODE_VERSION_AT_LEAST(0,11,0)
+		enum Nan::Encoding enc = static_cast<Nan::Encoding>(ParseEncoding(Isolate::GetCurrent(), info[0], node::BINARY));
+#else
+		enum Nan::Encoding enc = static_cast<Nan::Encoding>(ParseEncoding(info[0], node::BINARY));
+#endif
 		ssize_t len = Nan::DecodeBytes(info[0], enc);
 
 		if (len < 0) {
@@ -115,7 +119,11 @@ public:
 		Final(&state2, digest);
 
 		Local<Value> outString;
+#if NODE_VERSION_AT_LEAST(0,11,0)
 		enum Nan::Encoding enc = static_cast<Nan::Encoding>(ParseEncoding(Isolate::GetCurrent(), info[0], node::BINARY));
+#else
+		enum Nan::Encoding enc = static_cast<Nan::Encoding>(ParseEncoding(info[0], node::BINARY));
+#endif
 		if (enc == Nan::HEX) {
 			// Hex encoding
 			char hexdigest[MAX_DIGEST_SIZE * 2];
