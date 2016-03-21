@@ -1,6 +1,6 @@
 {
   "name": "sha3",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "A Node.js C++ extension for SHA-3 (Keccak)",
   "keywords": [
     "sha",
@@ -16,7 +16,7 @@
   "main": "build/Release/sha3",
   "scripts": {
     "install": "node-gyp rebuild",
-    "test": "python test/generate_tests.py > test/test_vectors.js && node test/test_vectors.js && mocha test/unit_tests.js"
+    "test": "ruby test/generate_tests.rb > test/test_vectors.js && node test/test_vectors.js && mocha test/unit_tests.js"
   },
   "gypfile": true,
   "directories": {

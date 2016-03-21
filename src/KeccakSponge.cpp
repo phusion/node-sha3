@@ -197,13 +197,13 @@ void PadAndSwitchToSqueezingPhase(spongeState *state)
 {
     // Note: the bits are numbered from 0=LSB to 7=MSB
     if (state->bitsInQueue + 1 == state->rate) {
-        state->dataQueue[state->bitsInQueue/8 ] |= 1 << (state->bitsInQueue % 8);
+        state->dataQueue[state->bitsInQueue/8 ] |= 6 << (state->bitsInQueue % 8);
         AbsorbQueue(state);
         memset(state->dataQueue, 0, state->rate/8);
     }
     else {
         memset(state->dataQueue + (state->bitsInQueue+7)/8, 0, state->rate/8 - (state->bitsInQueue+7)/8);
-        state->dataQueue[state->bitsInQueue/8 ] |= 1 << (state->bitsInQueue % 8);
+        state->dataQueue[state->bitsInQueue/8 ] |= 6 << (state->bitsInQueue % 8);
     }
     state->dataQueue[(state->rate-1)/8] |= 1 << ((state->rate-1) % 8);
     AbsorbQueue(state);

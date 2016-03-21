@@ -79,8 +79,9 @@ describe('SHA3', function(){
 
   describe('#digest()', function(){
     it('supports hex encoding', function(){
-      var result = "0eab42de4c3ceb9235fc91acffe746b29c29a8c366b7c60e4e67c466f36a4304c00" +
-                   "fa9caf9d87976ba469bcbe06713b435f091ef2769fb160cdab33d3670680e";
+      var result = "a69f73cca23a9ac5c8b567dc185a756e97c982164fe25859e0d1dcc1475c80a615b" +
+                   "2123af1f5f94c11e3e9402c3ac558f500199d95b6d3e301758586281dcd26";
+      
       assert.equal(result, new SHA3().digest('hex'));
     });
 
@@ -104,16 +105,16 @@ describe('SHA3', function(){
 
     it('incorporates the updates into the output', function(){
       var sha = new SHA3(224);
-      assert.equal('f71837502ba8e10837bdd8d365adb85591895602fc552b48b7390abd', sha.digest('hex'));
+      assert.equal('6b4e03423667dbb73b6e15454f0eb1abd4597f9a1b078e3f5b5a6bc7', sha.digest('hex'));
       sha.update('some value');
-      assert.equal('c6e8a28b9c677c4f5a1098cbc07454cdf7ba7dc4ee600a4655bec0a6', sha.digest('hex'));
+      assert.equal('25949fee5da8b0b51f1a1817e35230be9c34a9944d9c8b79d0ccff71', sha.digest('hex'));
     });
   });
 
   describe('chaining', function(){
     it('can chain', function(){
       assert.equal(
-        '76a781712088f94b4f6ca4962f886cac1158bc2f79eabade5ff76d14',
+        'ef0f992d8bce9b7a31d8cd75983012f8bc9ecc605e1270ae92014e74',
         SHA3(224).update('vlad').digest('hex')
       );
     })
