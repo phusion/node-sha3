@@ -6,7 +6,7 @@
 #include <cassert>
 #include <cstring>
 
-#include "KeccakNISTInterface.h"
+#include "sha3.h"
 
 #define MAX_DIGEST_SIZE 64
 #define ASSERT_IS_STRING_OR_BUFFER(val) \
@@ -16,7 +16,7 @@
 
 using namespace node;
 using namespace v8;
-using namespace Node_SHA3;
+//using namespace Node_SHA3;
 
 static void toHex(const char *data_buf, size_t size, char *output);
 
@@ -49,7 +49,7 @@ private:
 			obj = new SHA3Hash();
 			obj->Wrap(info.This());
 			obj->bitlen = hashlen;
-			::Init(&obj->state, hashlen);
+			::FIPS202_SHA3_Init(&obj->state, hashlen);
 			info.GetReturnValue().Set(info.This());
 		} else {
 			// Invoked as a plain function.
@@ -61,7 +61,7 @@ private:
 	}
 
 public:
-	hashState state;
+	sha3_ctx state;
 	int32_t bitlen;
 
 	static
@@ -97,12 +97,12 @@ public:
 			Local<Object> buffer_obj = info[0]->ToObject();
 			const char *buffer_data = Buffer::Data(buffer_obj);
 			size_t buffer_length = Buffer::Length(buffer_obj);
-			::Update(&obj->state, (const BitSequence *) buffer_data, buffer_length * 8);
+			::FIPS202_SHA3_Update(&obj->state, buffer_data, buffer_length);
 		} else {
 			char *buf = new char[len];
 			ssize_t written = Nan::DecodeWrite(buf, len, info[0], enc);
 			assert(written == len);
-			::Update(&obj->state, (const BitSequence *) buf, len * 8);
+			::FIPS202_SHA3_Update(&obj->state, buf, len);
 			delete[] buf;
 		}
 
@@ -112,11 +112,11 @@ public:
 	static
 	NAN_METHOD(Digest) {
 		SHA3Hash *obj = ObjectWrap::Unwrap<SHA3Hash>(info.This());
-		hashState state2;
+		sha3_ctx state2;
 		unsigned char digest[MAX_DIGEST_SIZE];
 
-		memcpy(&state2, &obj->state, sizeof(hashState));
-		Final(&state2, digest);
+		memcpy(&state2, &obj->state, sizeof(sha3_ctx));
+		::FIPS202_SHA3_Final(&state2, digest, obj->bitlen/8);
 
 		Local<Value> outString;
 #if NODE_VERSION_AT_LEAST(0,11,0)
