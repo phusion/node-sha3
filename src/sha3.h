@@ -1,3 +1,8 @@
+/* sha3 implementation https://github.com/steaknife/sha3
+ * Copyright (c) 2016 Barry Allard barry (dot) allard (at) gmail (dot) com
+ * MIT License
+ * Version 1.0.0
+ */
 #ifndef SHA3_H
 #define SHA3_H
 
