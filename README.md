@@ -52,7 +52,7 @@ It requires that you have Python 2.7 installed and available via the
 
 ## Warning
 
-Do not use SHA-3 for hashing passwords. Do not even use SHA-3 + salt for hashing passowords. Use a [slow hash](http://codahale.com/how-to-safely-store-a-password/) instead.
+Do not use SHA-3 for hashing passwords. Do not even use SHA-3 + salt for hashing passwords. Use a [slow hash](http://codahale.com/how-to-safely-store-a-password/) instead.
 
 ## See also
 
