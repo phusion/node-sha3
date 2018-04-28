@@ -2,6 +2,14 @@ var assert = require('assert');
 var util   = require('util');
 var SHA3 = require('../').SHA3Hash;
 
+function newBuffer(data, encoding) {
+  try {
+    return Buffer.from(data, encoding);
+  } catch(e) {
+    return new Buffer(data, encoding)
+  }
+}
+
 describe('SHA3', function(){
 
   describe('constructor', function(){
@@ -61,7 +69,8 @@ describe('SHA3', function(){
 
     it('accepts a buffer as input', function(){
       var sha = new SHA3(224);
-      var buffer = Buffer.from('aloha');
+
+      var buffer = newBuffer('aloha', 'utf8');
       assert.doesNotThrow(function(){
         sha.update(buffer);
       });
