@@ -56,7 +56,7 @@ private:
 			const int argc = 1;
 			Local<Value> argv[argc] = { Nan::New<Number>(hashlen) };
 			Local<Function> cons = Nan::New<Function>(constructor);
-			info.GetReturnValue().Set(cons->NewInstance(argc, argv));
+			info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
 		}
 	}
 

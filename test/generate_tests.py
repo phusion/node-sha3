@@ -34,7 +34,7 @@ var inst;
 
                     print """// %s %s
         inst = new SHA3.SHA3Hash(%s);
-        inst.update(new Buffer(%r, 'hex'));
+        inst.update(Buffer.from(%r, 'hex'));
         assert.equal(inst.digest('hex'), %r);
         process.stdout.write(".");
 
