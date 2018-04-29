@@ -1,6 +1,6 @@
 {
   "name": "sha3",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A Node.js C++ extension for SHA-3 (Keccak)",
   "keywords": [
     "sha",
@@ -28,13 +28,12 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">= 0.10",
-    "iojs": ">= 1.0"
+    "node": ">= 8.11.1"
   },
   "dependencies": {
-    "nan": "^2.0.5"
+    "nan": "2.10.0"
   },
   "devDependencies": {
-    "mocha": "^2.1.0"
+    "mocha": "5.1.1"
   }
 }
