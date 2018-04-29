@@ -19,6 +19,13 @@ var assert = require('assert');
 var SHA3 = require('./../build/Release/sha3');
 var inst;
 
+function newBuffer(data, encoding) {
+  try {
+    return Buffer.from(data, encoding);
+  } catch(e) {
+    return new Buffer(data, encoding)
+  }
+}
 """
 
     for path, hashlen in FILES:
@@ -34,7 +41,7 @@ var inst;
 
                     print """// %s %s
         inst = new SHA3.SHA3Hash(%s);
-        inst.update(new Buffer(%r, 'hex'));
+        inst.update(newBuffer(%r, 'hex'));
         assert.equal(inst.digest('hex'), %r);
         process.stdout.write(".");
 

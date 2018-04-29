@@ -2,6 +2,14 @@ var assert = require('assert');
 var util   = require('util');
 var SHA3 = require('../').SHA3Hash;
 
+function newBuffer(data, encoding) {
+  try {
+    return Buffer.from(data, encoding);
+  } catch(e) {
+    return new Buffer(data, encoding)
+  }
+}
+
 describe('SHA3', function(){
 
   describe('constructor', function(){
@@ -29,25 +37,25 @@ describe('SHA3', function(){
     it('throws an error with an integer hashlen of 0', function(){
       assert.throws(function(){
         new SHA3(0);
-      }, "Unsupported hash length");
+      }, "TypeError: Unsupported hash length");
     });
 
     it('throws an error with an integer which is not a supported hash length', function(){
       assert.throws(function(){
         new SHA3(225);
-      }, "Unsupported hash length");
+      }, "TypeError: Unsupported hash length");
     });
 
     it('throws an error with any non-positive integer value', function(){
       assert.throws(function(){
         new SHA3('hi');
-      }, "Unsupported hash length");
+      }, "TypeError: Unsupported hash length");
       assert.throws(function(){
         new SHA3(null);
-      }, "Unsupported hash length");
+      }, "TypeError: Unsupported hash length");
       assert.throws(function(){
         new SHA3(-1);
-      }, "Unsupported hash length");
+      }, "TypeError: Unsupported hash length");
     });
   });
 
@@ -61,7 +69,8 @@ describe('SHA3', function(){
 
     it('accepts a buffer as input', function(){
       var sha = new SHA3(224);
-      var buffer = new Buffer('aloha');
+
+      var buffer = newBuffer('aloha', 'utf8');
       assert.doesNotThrow(function(){
         sha.update(buffer);
       });
@@ -72,7 +81,7 @@ describe('SHA3', function(){
       [1, 3.14, {}, []].forEach(function(arg){
         assert.throws(function(){
           sha.update(arg);
-        }, "Not a string or buffer");
+        }, "TypeError: Not a string or buffer");
       });
     });
   });
@@ -99,7 +108,7 @@ describe('SHA3', function(){
     it('does not support any other encoding', function(){
       assert.throws(function(){
         new SHA3().digest('buffer');
-      }, "Unsupported output encoding");
+      }, "TypeError: Unsupported output encoding");
     });
 
     it('incorporates the updates into the output', function(){
