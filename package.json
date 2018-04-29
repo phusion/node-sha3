@@ -32,9 +32,9 @@
     "iojs": ">= 1.0"
   },
   "dependencies": {
-    "nan": "^2.0.5"
+    "nan": "2.10.0"
   },
   "devDependencies": {
-    "mocha": "^2.1.0"
+    "mocha": "5.1.1"
   }
 }
