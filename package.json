@@ -27,9 +27,6 @@
     "email": "hongli@phusion.nl"
   },
   "license": "MIT",
-  "engines": {
-    "node": ">= 8.11.1"
-  },
   "dependencies": {
     "nan": "2.10.0"
   },
