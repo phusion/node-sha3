@@ -1,6 +1,6 @@
 {
   "name": "sha3",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A Node.js C++ extension for SHA-3 (Keccak)",
   "keywords": [
     "sha",
