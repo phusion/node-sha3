@@ -3,9 +3,26 @@
   "version": "2.0.0",
   "description": "The Keccak family of hashing algorithms.",
   "main": "index.js",
-  "repository": "https://github.com/phusion/node-sha3",
-  "author": "Devin Canterberry <devin@twuni.org>",
+  "keywords": [
+    "sha",
+    "sha3",
+    "sha-3",
+    "keccak",
+    "hash",
+    "hashing"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/phusion/node-sha3.git"
+  },
+  "author": {
+    "name": "Devin Canterberry",
+    "email": "devin@twuni.org"
+  },
   "license": "MIT",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "build": "babel --only '**/index.js' --no-comments --compact true --minified --source-maps false --out-dir lib src; cp -vfR README.md LICENSE package.json yarn.lock lib/",
     "lint": "eslint src test",
