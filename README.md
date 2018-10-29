@@ -7,7 +7,7 @@
 [![devDependencies][10]][9]
 [![license][11]][12]
 
-This Node.js extension implements the SHA-3 ([Keccak][1]) cryptographic hashing algorithm. It is based on the reference C implementation, version 3.2. The exposed interface is almost identical to that of the `crypto` standard library.
+A pure JavaScript implementation of the Keccak family of cryptographic hashing algorithms, most notably including Keccak and SHA3.
 
 [![Phusion][13]][2]
 
@@ -27,57 +27,131 @@ $ yarn add sha3
 
 ## Usage
 
-Keccak supports 5 hash lengths: 224-bit, 256-bit, 384-bit, 512-bit and variable length. Variable length is not supported by this Node.js extension. Unless the user specifies otherwise, this Node.js extension assumes 512-bit.
+You can use this library from Node.js, from web browsers, and/or using ES6 imports.
+
+### Node.js (CommonJS style)
 
 ```javascript
-const SHA3 = require('sha3');
-
-// Generate 512-bit digest.
-let d = new SHA3.SHA3Hash();
-d.update('foo');
-d.digest('hex');
-// => "1597842a..."
-
-// Generate 224-bit digest.
-d = new SHA3.SHA3Hash(224);
-d.update('foo');
-d.digest('hex');
-// => "daa94da7..."
+const { SHA3 } = require('sha3');
 ```
 
-### new SHA3Hash([hashlen])
+### ES6
 
-This is the hash object. `hashlen` is 512 by default.
-
-### hash.update(data, [input_encoding])
-
-Updates the hash content with the given data, the encoding of which is given in `input_encoding` and can be `'utf8'`, `'ascii'` or `'binary'`. Defaults to `'binary'`. This can be called many times with new data as it is streamed.
-
-### hash.digest([encoding])
-
-Calculates the digest of all of the passed data to be hashed. The encoding can be `'hex'` or `'binary'`. Defaults to `'binary'`.
-
-Note: unlike `crypto.Hash`, a `SHA3Hash` object _can_ still be used after the `digest()` method been called.
-
-## Running the test suite
-
-Run the test suite as follows:
-
-```bash
-$ npm test
+```javascript
+import { SHA3 } from 'sha3';
 ```
 
-The test suite is automatically generated from Keccak's reference test suite.
-It requires that you have Python 2.7 installed and available via the
-`python` executable.
+### What's in the box
 
-## Warning
+FIPS-compatible interfaces for the following algorithms:
 
-Do not use SHA-3 for hashing passwords. Do not even use SHA-3 + salt for hashing passwords. Use a [slow hash][14] instead.
+ * `SHA3`: The SHA3 algorithm.
+ * `Keccak`: The Keccak algorithm.
 
-## See also
+> :bulb: **Legacy Note:** Savvy inspectors may notice that `SHA3Hash` is also provided. Prior to v2.0.0,
+> this library only implemented an early version of the SHA3 algorithm. Since then, SHA3 has diverged from
+> Keccak and is using a different padding scheme, but for compatibility, this alias is sticking around
+> for a bit longer.
 
-[Digest::SHA3 for Ruby](https://github.com/phusion/digest-sha3-ruby)
+### Examples
+
+#### Generating a SHA3-512 hash
+
+```javascript
+import { SHA3 } from 'sha3';
+
+const hash = new SHA3(512);
+
+hash.update('foo');
+hash.digest('hex');
+```
+
+#### Generating a Keccak-256 hash
+
+```javascript
+import { Keccak } from 'sha3';
+
+const hash = new Keccak(256);
+
+hash.update('foo');
+hash.digest('hex');
+```
+
+### API Reference
+
+All hash implementations provided by this library conform to the following API specification.
+
+#### #constructor([size=512])
+
+The constructor for each hash (e.g: `Keccak`, `SHA3`), expects the following parameters:
+
+ * `size` (Number): Optional. The size of the hash to create, in bits. If provided, this must be one of `224`, `256`, `384`, or `512`. Defaults to `512`.
+
+##### Example
+
+```javascript
+// Construct a new Keccak hash of size 256
+const hash = new Keccak(256);
+```
+
+#### #update(data, [encoding='utf8'])
+
+Updates the hash content with the given data. Returns the hash object itself.
+
+ * `data` (Buffer|string): **Required.** The data to read into the hash.
+ * `encoding` (string): **Optional.** The encoding of the given `data`, if of type `string`. Defaults to `'utf8'`.
+
+> :bulb: See [Buffers and Character Encodings][15] for a list of allowed encodings.
+
+##### Example
+
+```javascript
+const hash = new Keccak(256);
+
+hash.update('hello');
+hash.update('we can also chain these').update('together');
+```
+
+### #digest([encoding='binary'])
+
+Digests the hash and returns the result. After calling this function, the hash **may** continue to receive input.
+
+ * `encoding` (string): **Optional.** The encoding to use for the returned digest. Defaults to `'binary'`.
+
+If an `encoding` is provided and is a value other than `'binary'`, then this function returns a `string`.
+Otherwise, it returns a `Buffer`.
+
+> :bulb: See [Buffers and Character Encodings][15] for a list of allowed encodings.
+
+##### Example
+
+```javascript
+const hash = new Keccak(256);
+hash.update('hello');
+hash.digest('hex');
+
+hash.update('we can keep reading data even after digesting').digest('hex');
+```
+
+## Testing
+
+Run `yarn test` for the full test suite.
+
+## Disclaimer
+
+Cryptographic hashes provide **integrity**, but do not provide **authenticity** or **confidentiality**.
+Hash functions are one part of the cryptographic ecosystem, alongside other primitives like ciphers and
+MACs. If considering this library for the purpose of protecting passwords, you may actually be looking
+for a [key derivation function][16], which can provide much better security guarantees for this use case.
+
+## Special Thanks
+
+The following resources were invaluable to this implementation and deserve special thanks
+for work well done:
+
+ * [Keccak pseudocode][17]: The Keccak team's excellent pseudo-code and technical descriptions.
+
+ * [mjosaarinen/tiny_sha3][18]: Markku-Juhani O. Saarinen's compact, legible, and hackable implementation.
 
 [1]: https://keccak.team/keccak.html
 [2]: https://www.phusion.nl/
@@ -93,3 +167,7 @@ Do not use SHA-3 for hashing passwords. Do not even use SHA-3 + salt for hashing
 [12]: https://github.com/phusion/node-sha3/blob/master/LICENSE
 [13]: https://www.phusion.nl/images/header/pinwheel_logo.svg
 [14]: http://codahale.com/how-to-safely-store-a-password/
+[15]: https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings
+[16]: https://www.npmjs.com/package/pbkdf2
+[17]: https://keccak.team/keccak_specs_summary.html
+[18]: https://github.com/mjosaarinen/tiny_sha3
