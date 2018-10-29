@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import copy from './copy';
 import flip from './flip';
 import rotate from './rotate';

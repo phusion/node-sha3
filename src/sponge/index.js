@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import keccak from './keccak';
 
 const allowedCapacityValues = [224, 256, 384, 512];

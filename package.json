@@ -20,5 +20,8 @@
     "eslint": "5.8.0",
     "eslint-plugin-ante": "1.0.1",
     "mocha": "5.2.0"
+  },
+  "dependencies": {
+    "buffer": "5.2.1"
   }
 }

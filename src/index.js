@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import Sponge from './sponge';
 
 const createHash = ({ padding }) => function Hash(size = 512) {
