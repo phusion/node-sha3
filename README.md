@@ -125,7 +125,7 @@ hash.update('hello');
 hash.update('we can also chain these').update('together');
 ```
 
-### `#digest([encoding='binary'])`
+#### `#digest([encoding='binary'])`
 
 Digests the hash and returns the result. After calling this function, the hash **may** continue to receive input.
 
@@ -136,7 +136,7 @@ Otherwise, it returns a `Buffer`.
 
 > :bulb: See [Buffers and Character Encodings][15] for a list of allowed encodings.
 
-#### Example
+##### Example
 
 ```javascript
 const hash = new Keccak(256);
@@ -152,14 +152,14 @@ hash.digest();
 // => hash of everything so far as a Buffer object
 ```
 
-### `#reset()`
+#### `#reset()`
 
 Resets a hash to its initial state.
 
  * All input buffers are cleared from memory.
  * The hash object can safely be reused to compute another hash.
 
-#### Example
+##### Example
 
 ```javascript
 const hash = new Keccak(256);
