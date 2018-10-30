@@ -25,8 +25,9 @@
   },
   "scripts": {
     "build": "babel --only '**/index.js' --no-comments --compact true --minified --source-maps false --out-dir lib src; cp -vfR README.md LICENSE package.json yarn.lock lib/",
+    "coverage": "nyc report",
     "lint": "eslint src test",
-    "test": "mocha --require @babel/register --recursive test"
+    "test": "nyc --silent --check-coverage --lines 100 --per-file mocha --require @babel/register --recursive test"
   },
   "devDependencies": {
     "@babel/cli": "7.1.2",
@@ -36,7 +37,8 @@
     "babel-eslint": "10.0.1",
     "eslint": "5.8.0",
     "eslint-plugin-ante": "1.0.1",
-    "mocha": "5.2.0"
+    "mocha": "5.2.0",
+    "nyc": "13.0.1"
   },
   "dependencies": {
     "buffer": "5.2.1"
