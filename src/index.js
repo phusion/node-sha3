@@ -29,6 +29,11 @@ const createHash = ({ padding }) => function Hash(size = 512) {
     return buffer;
   };
 
+  this.reset = () => {
+    sponge.reset();
+    return this;
+  };
+
   return this;
 };
 

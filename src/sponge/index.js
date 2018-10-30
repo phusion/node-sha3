@@ -56,6 +56,13 @@ const Sponge = function({ capacity, padding }) {
     return output.state.slice(0, hashSize);
   };
 
+  this.reset = () => {
+    queue.fill(0);
+    state.fill(0);
+    queueOffset = 0;
+    return this;
+  };
+
   return this;
 };
 

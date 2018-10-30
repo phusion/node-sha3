@@ -1,6 +1,6 @@
 const { describe, it } = require('mocha');
 const assert = require('assert');
-const { SHA3Hash: SHA3 } = require('../src');
+const { Keccak, SHA3 } = require('../src');
 
 const newBuffer = (input, encoding) => {
   try {
@@ -10,107 +10,109 @@ const newBuffer = (input, encoding) => {
   }
 };
 
-describe('SHA3', () => {
-  describe('constructor', () => {
-    it('allows no hash length to be specified', () => {
-      assert.doesNotThrow(() => new SHA3());
-    });
+const Algorithms = {
+  Keccak,
+  'SHA-3': SHA3
+};
 
-    it('allows omitting the new keyword', () => {
-      // eslint-disable-next-line new-cap
-      assert.doesNotThrow(() => SHA3());
-    });
+Object.keys(Algorithms).forEach((algorithm) => {
+  const { [algorithm]: Hash } = Algorithms;
 
-    it('accepts a number to its constructor', () => {
-      assert.doesNotThrow(() => [
-        new SHA3(224),
-        new SHA3(256),
-        new SHA3(384),
-        new SHA3(512)
-      ]);
-    });
-
-    it('throws an error with an integer hashlen of 0', () => {
-      assert.throws(() => new SHA3(0), 'TypeError: Unsupported hash length');
-    });
-
-    it('throws an error with an integer which is not a supported hash length', () => {
-      assert.throws(() => new SHA3(225), 'TypeError: Unsupported hash length');
-    });
-
-    it('throws an error with any non-positive integer value', () => {
-      assert.throws(() => new SHA3('hi'), 'TypeError: Unsupported hash length');
-      assert.throws(() => new SHA3(null), 'TypeError: Unsupported hash length');
-      assert.throws(() => new SHA3(-1), 'TypeError: Unsupported hash length');
-    });
-  });
-
-  describe('#update()', () => {
-    it('accepts a string as input', () => {
-      const sha = new SHA3(224);
-      assert.doesNotThrow(() => {
-        sha.update('some string value');
+  describe(algorithm, () => {
+    describe('#constructor()', () => {
+      it('does not throw an error when not given a hash size', () => {
+        assert.doesNotThrow(() => new Hash());
       });
-    });
 
-    it('accepts a buffer as input', () => {
-      const sha = new SHA3(224);
-
-      const buffer = newBuffer('aloha', 'utf8');
-      assert.doesNotThrow(() => {
-        sha.update(buffer);
-      });
-    });
-
-    it('does not accept any other types', () => {
-      const sha = new SHA3(224);
-      [1, 3.14, {}, []].forEach((arg) => {
-        assert.throws(() => {
-          sha.update(arg);
-        }, 'TypeError: Not a string or buffer');
-      });
-    });
-  });
-
-  describe('#digest()', () => {
-    it('supports hex encoding', () => {
-      const result = '0eab42de4c3ceb9235fc91acffe746b29c29a8c366b7c60e4e67c466f36a4304c00fa9caf9d87976ba469bcbe06713b435f091ef2769fb160cdab33d3670680e';
-      assert.equal(result, new SHA3().digest('hex'));
-    });
-
-    it('supports binary encoding', () => {
-      const binary = new SHA3().digest('binary');
-      assert.ok(binary);
-      assert.ok(binary.length > 0);
-    });
-
-    it('defaults to binary encoding', () => {
-      const binary = new SHA3().digest();
-      assert.ok(binary);
-      assert.ok(binary.length > 0);
-    });
-
-    it('does not support any other encoding', () => {
-      assert.throws(() => {
-        new SHA3().digest('buffer');
-      }, 'TypeError: Unsupported output encoding');
-    });
-
-    it('incorporates the updates into the output', () => {
-      const sha = new SHA3(224);
-      assert.equal('f71837502ba8e10837bdd8d365adb85591895602fc552b48b7390abd', sha.digest('hex'));
-      sha.update('some value');
-      assert.equal('c6e8a28b9c677c4f5a1098cbc07454cdf7ba7dc4ee600a4655bec0a6', sha.digest('hex'));
-    });
-  });
-
-  describe('chaining', () => {
-    it('can chain', () => {
-      assert.equal(
-        '76a781712088f94b4f6ca4962f886cac1158bc2f79eabade5ff76d14',
+      it('does not throw an error when called directly instead of constructed (although this is discouraged)', () => {
         // eslint-disable-next-line new-cap
-        SHA3(224).update('vlad').digest('hex')
-      );
+        assert.doesNotThrow(() => Hash());
+      });
+
+      it('does not throw an error when given a hash size of 224', () => {
+        assert.doesNotThrow(() => new Hash(224));
+      });
+
+      it('does not throw an error when given a hash size of 256', () => {
+        assert.doesNotThrow(() => new Hash(256));
+      });
+
+      it('does not throw an error when given a hash size of 384', () => {
+        assert.doesNotThrow(() => new Hash(384));
+      });
+
+      it('does not throw an error when given a hash size of 512', () => {
+        assert.doesNotThrow(() => new Hash(512));
+      });
+
+      it('throws an error when given an unsupported hash size', () => {
+        assert.throws(() => new Hash(1024), 'TypeError: Unsupported hash length');
+      });
+
+      it('throws an error when given an non-numeric hash size', () => {
+        assert.throws(() => new Hash(null), 'TypeError: Unsupported hash length');
+      });
+    });
+
+    describe('#update()', () => {
+      it('does not throw an error when given a string', () => {
+        assert.doesNotThrow(() => new Hash(224).update('example'));
+      });
+
+      it('does not throw an error when given a Buffer', () => {
+        assert.doesNotThrow(() => new Hash(224).update(newBuffer('example', 'utf8')));
+      });
+
+      it('throws an error when given a floating point number', () => {
+        assert.throws(() => new Hash(224).update(3.14), 'TypeError: Not a string or buffer');
+      });
+
+      it('throws an error when given an integer', () => {
+        assert.throws(() => new Hash(224).update(1234567890), 'TypeError: Not a string or buffer');
+      });
+
+      it('throws an error when given an array', () => {
+        assert.throws(() => new Hash(224).update(['hello', 'world']), 'TypeError: Not a string or buffer');
+      });
+
+      it('throws an error when given an object literal', () => {
+        assert.throws(() => new Hash(224).update({ hello: 'world' }), 'TypeError: Not a string or buffer');
+      });
+    });
+
+    describe('#digest()', () => {
+      it('returns a string when given "hex" encoding', () => {
+        assert.equal('string', typeof new Hash(512).digest('hex'));
+      });
+
+      it('returns a Buffer when given "binary" encoding', () => {
+        assert.ok(Buffer.isBuffer(new Hash().digest('binary')));
+      });
+
+      it('returns a Buffer when not given an encoding', () => {
+        assert.ok(Buffer.isBuffer(new Hash().digest()));
+      });
+
+      it('throws an error when given a bad value for encoding', () => {
+        assert.throws(() => new Hash().digest('not-a-real-encoding'), 'TypeError: Unsupported output encoding');
+      });
+
+      it('returns a hash that incorporates input received since the previous digest', () => {
+        const hash = new Hash(224);
+        assert.notEqual(hash.update('hello').digest('hex'), hash.update('hello').digest('hex'));
+      });
+    });
+
+    describe('#reset()', () => {
+      it('initializes the hash to its default state', () => {
+        const hash = new Hash(256);
+        assert.equal(hash.reset().update('hello').digest('hex'), hash.reset().update('hello').digest('hex'));
+      });
     });
   });
+});
+
+
+
+describe('SHA-3', () => {
 });

@@ -93,7 +93,7 @@ hash.digest('hex');
 
 All hash implementations provided by this library conform to the following API specification.
 
-#### #constructor([size=512])
+#### `#constructor([size=512])`
 
 The constructor for each hash (e.g: `Keccak`, `SHA3`), expects the following parameters:
 
@@ -106,7 +106,7 @@ The constructor for each hash (e.g: `Keccak`, `SHA3`), expects the following par
 const hash = new Keccak(256);
 ```
 
-#### #update(data, [encoding='utf8'])
+#### `#update(data, [encoding='utf8'])`
 
 Updates the hash content with the given data. Returns the hash object itself.
 
@@ -121,10 +121,11 @@ Updates the hash content with the given data. Returns the hash object itself.
 const hash = new Keccak(256);
 
 hash.update('hello');
+
 hash.update('we can also chain these').update('together');
 ```
 
-### #digest([encoding='binary'])
+### `#digest([encoding='binary'])`
 
 Digests the hash and returns the result. After calling this function, the hash **may** continue to receive input.
 
@@ -135,14 +136,43 @@ Otherwise, it returns a `Buffer`.
 
 > :bulb: See [Buffers and Character Encodings][15] for a list of allowed encodings.
 
-##### Example
+#### Example
 
 ```javascript
 const hash = new Keccak(256);
-hash.update('hello');
-hash.digest('hex');
 
-hash.update('we can keep reading data even after digesting').digest('hex');
+hash.update('hello');
+
+hash.digest('hex');
+// => hash of 'hello' as a hex-encoded string
+
+hash.update('we can keep reading data even after digesting');
+
+hash.digest();
+// => hash of everything so far as a Buffer object
+```
+
+### `#reset()`
+
+Resets a hash to its initial state.
+
+ * All input buffers are cleared from memory.
+ * The hash object can safely be reused to compute another hash.
+
+#### Example
+
+```javascript
+const hash = new Keccak(256);
+
+hash.update('hello');
+hash.digest();
+// => hash of 'hello'
+
+hash.reset();
+
+hash.update('world');
+hash.digest();
+// => hash of 'world'
 ```
 
 ## Testing
