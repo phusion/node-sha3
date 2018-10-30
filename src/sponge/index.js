@@ -25,7 +25,6 @@ const Sponge = function({ capacity, padding }) {
   state.fill(0);
 
   const queue = Buffer.alloc(queueSize);
-  queue.fill(0);
 
   this.absorb = (buffer) => {
     for (let i = 0; i < buffer.length; i++) {
@@ -34,7 +33,6 @@ const Sponge = function({ capacity, padding }) {
       if (queueOffset >= queueSize) {
         commit(queue, state);
         queueOffset = 0;
-        queue.fill(0);
       }
     }
     return this;
@@ -49,6 +47,7 @@ const Sponge = function({ capacity, padding }) {
     queue.copy(output.queue);
     state.copy(output.state);
 
+    output.queue.fill(0, queueOffset);
     output.queue[queueOffset] |= padding;
     output.queue[queueSize - 1] |= 0x80;
 
