@@ -111,8 +111,3 @@ Object.keys(Algorithms).forEach((algorithm) => {
     });
   });
 });
-
-
-
-describe('SHA-3', () => {
-});

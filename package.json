@@ -26,7 +26,7 @@
   "scripts": {
     "build": "babel --only '**/index.js' --no-comments --compact true --minified --source-maps false --out-dir lib src; cp -vfR README.md LICENSE package.json yarn.lock lib/",
     "lint": "eslint src test",
-    "test": "mocha --require @babel/register test"
+    "test": "mocha --require @babel/register --recursive test"
   },
   "devDependencies": {
     "@babel/cli": "7.1.2",
