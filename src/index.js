@@ -32,7 +32,28 @@ const createHash = ({ padding }) => function Hash(size = 512) {
   return this;
 };
 
+/**
+ * The Keccak reference implementation uses the simplest possible padding scheme,
+ * described as follows:
+ *
+ * > Definition 1. Multi-rate padding, denoted by pad10\∗1, appends a single bit 1
+ * > followed by the minimum number of bits 0 followed by a single bit 1 such that
+ * > the length of the result is a multiple of the block length.
+ *
+ * @see {@link https://keccak.team/files/Keccak-reference-3.0.pdf}, Section 1.1.2
+ */
 const Keccak = createHash({ padding: 0x01 });
+
+/**
+ * The SHA-3 specification requires that the input message be appended with a
+ * two-bit suffix, `01`. For byte-aligned messages, this results in an extra
+ * `0x02` byte (bits fill in from the right).
+ *
+ * Then, the standard Keccak padding scheme is applied (pad10*1), placing an
+ * additional bit at the `0x04` position, resulting in `0x06`.
+ *
+ * @see {@link https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf}, Section B.2
+ */
 const SHA3 = createHash({ padding: 0x06 });
 
 /**
@@ -43,8 +64,15 @@ const SHA3 = createHash({ padding: 0x06 });
  */
 const SHA3Hash = Keccak;
 
-const index = { Keccak, SHA3, SHA3Hash };
+/**
+ * For backwards-compatibility, sprinkle SHA3Hash into the default export.
+ *
+ * @deprecated
+ */
+SHA3.SHA3Hash = SHA3Hash;
 
+// Named exports for all hashes included by this library.
 export { Keccak, SHA3, SHA3Hash };
 
-export default index;
+// Make the default export useful as-is.
+export default SHA3;

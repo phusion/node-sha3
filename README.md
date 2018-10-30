@@ -1,4 +1,4 @@
-# A Node.js C++ extension for SHA-3 (Keccak)
+# SHA-3 for JavaScript
 
 [![Travis CI][3]][4]
 [![npm version][5]][6]
@@ -8,6 +8,10 @@
 [![license][11]][12]
 
 A pure JavaScript implementation of the Keccak family of cryptographic hashing algorithms, most notably including Keccak and SHA3.
+
+> :bulb: **Legacy Note:** In previous versions of this library, the `SHA3Hash` object provided a *Keccak* hash, **not** what we
+> currently know as a SHA-3 hash. For backwards-compatibility, this object is still exported. However, users are encouraged to
+> switch to using the `SHA3` or `Keccak` objects instead, which provide the SHA-3 and Keccak hashing algorithms, respectively.
 
 [![Phusion][13]][2]
 
@@ -32,13 +36,21 @@ You can use this library from Node.js, from web browsers, and/or using ES6 impor
 ### Node.js (CommonJS style)
 
 ```javascript
+// Standard FIPS 202 SHA-3 implementation
 const { SHA3 } = require('sha3');
+
+// The Keccak hash function is also available
+const { Keccak } = require('sha3');
 ```
 
 ### ES6
 
 ```javascript
+// Standard FIPS 202 SHA-3 implementation
 import { SHA3 } from 'sha3';
+
+// The Keccak hash function is also available
+import { Keccak } from 'sha3';
 ```
 
 ### What's in the box
