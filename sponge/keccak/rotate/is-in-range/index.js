@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.default=void 0;var isInRange=function isInRange(start,index,end){return start<=index&&index<end};var _default=isInRange;exports.default=_default;

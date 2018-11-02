@@ -1,0 +1,1 @@
+"use strict";var copy=function copy(source,sourceIndex,target,targetIndex){return source.copy(target,targetIndex*8,sourceIndex*8,(sourceIndex+1)*8)};module.exports=copy;
