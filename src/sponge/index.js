@@ -3,11 +3,45 @@ import keccak from './keccak';
 
 const allowedCapacityValues = [224, 256, 384, 512];
 
-const commit = (input, output) => {
-  for (let i = 0; i < input.length; i++) {
-    output[i] ^= input[i];
+const fill = (A, value, offset = 0) => {
+  for (let i = offset; i < A.length; i++) {
+    A[i] = value;
   }
-  keccak(output);
+};
+
+// eslint-disable-next-line max-params
+const toWord = (I, i, O, o) => {
+  O[o] ^= I[i + 7] << 24 | I[i + 6] << 16 | I[i + 5] << 8 | I[i + 4];
+  O[o + 1] ^= I[i + 3] << 24 | I[i + 2] << 16 | I[i + 1] << 8 | I[i];
+};
+
+// eslint-disable-next-line max-params
+const toBytes = (I, i, O, o) => {
+  O[o] = I[i + 1];
+  O[o + 1] = I[i + 1] >>> 8;
+  O[o + 2] = I[i + 1] >>> 16;
+  O[o + 3] = I[i + 1] >>> 24;
+  O[o + 4] = I[i];
+  O[o + 5] = I[i] >>> 8;
+  O[o + 6] = I[i] >>> 16;
+  O[o + 7] = I[i] >>> 24;
+};
+
+const commit = (queue, state, permute) => {
+  for (let i = 0; i < queue.length; i += 8) {
+    toWord(queue, i, state, i / 4);
+  }
+  permute(state);
+};
+
+const exportHash = (state, hashSize) => {
+  const hash = Buffer.allocUnsafe(hashSize);
+
+  for (let i = 0; i < hashSize; i += 8) {
+    toBytes(state, i / 4, hash, i);
+  }
+
+  return hash;
 };
 
 // eslint-disable-next-line max-statements
@@ -16,22 +50,23 @@ const Sponge = function({ capacity, padding }) {
     throw new Error('Unsupported hash length');
   }
 
+  const permute = keccak();
+
   const stateSize = 200;
   const hashSize = capacity / 8;
   const queueSize = stateSize - hashSize * 2;
   let queueOffset = 0;
 
-  const state = Buffer.alloc(stateSize);
-  state.fill(0);
-
-  const queue = Buffer.alloc(queueSize);
+  const state = new Uint32Array(stateSize / 4);
+  const queue = Buffer.allocUnsafe(queueSize);
 
   this.absorb = (buffer) => {
     for (let i = 0; i < buffer.length; i++) {
       queue[queueOffset] = buffer[i];
       queueOffset += 1;
+
       if (queueOffset >= queueSize) {
-        commit(queue, state);
+        commit(queue, state, permute);
         queueOffset = 0;
       }
     }
@@ -40,25 +75,28 @@ const Sponge = function({ capacity, padding }) {
 
   this.squeeze = () => {
     const output = {
-      queue: Buffer.alloc(queueSize),
-      state: Buffer.alloc(stateSize)
+      queue: Buffer.allocUnsafe(queueSize),
+      state: new Uint32Array(stateSize / 4)
     };
 
     queue.copy(output.queue);
-    state.copy(output.state);
+    for (let i = 0; i < state.length; i++) {
+      output.state[i] = state[i];
+    }
 
-    output.queue.fill(0, queueOffset);
+    fill(output.queue, 0, queueOffset);
+
     output.queue[queueOffset] |= padding;
     output.queue[queueSize - 1] |= 0x80;
 
-    commit(output.queue, output.state);
+    commit(output.queue, output.state, permute);
 
-    return output.state.slice(0, hashSize);
+    return exportHash(output.state, hashSize);
   };
 
   this.reset = () => {
-    queue.fill(0);
-    state.fill(0);
+    fill(queue, 0);
+    fill(state, 0);
     queueOffset = 0;
     return this;
   };

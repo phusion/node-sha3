@@ -1,24 +1,18 @@
-// eslint-disable-next-line max-statements
-const xor = (output, outputIndex, ...inputs) => {
-  const oi = outputIndex * 8;
+const xor = (O, o, ...I) => {
+  const oi = o * 2;
 
-  if (inputs.length >= 2) {
-    const [input, inputIndex] = inputs;
-    const ii = inputIndex * 8;
+  if (I.length >= 2) {
+    const ii = I[1] * 2;
 
-    for (let j = 0; j < 8; j++) {
-      output[oi + j] = input[ii + j];
-    }
+    O[oi] = I[0][ii];
+    O[oi + 1] = I[0][ii + 1];
   }
 
-  for (let i = 2; i < inputs.length; i += 2) {
-    const input = inputs[i];
-    const inputIndex = inputs[i + 1];
-    const ii = inputIndex * 8;
+  for (let i = 2; i < I.length; i += 2) {
+    const ii = I[i + 1] * 2;
 
-    for (let j = 0; j < 8; j++) {
-      output[oi + j] ^= input[ii + j];
-    }
+    O[oi] ^= I[i][ii];
+    O[oi + 1] ^= I[i][ii + 1];
   }
 };
 

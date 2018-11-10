@@ -1,24 +1,14 @@
-import leftShift from './left-shift';
-import rightShift from './right-shift';
+const M = 32;
 
-const left = new Uint8Array(8);
-const right = new Uint8Array(8);
+const rotate = (W, r) => {
+  const [H, L] = W;
+  const i = r < 32 ? 0 : 1;
+  const j = (i + 1) % 2;
 
-// eslint-disable-next-line max-params
-const rotate = (input, inputOffset, rotation, output, outputOffset) => {
-  if (!output || typeof outputOffset === 'undefined') {
-    return rotate(input, inputOffset, rotation, input, inputOffset);
-  }
+  W[i] = H << r | L >>> M - r;
+  W[j] = L << r | H >>> M - r;
 
-  if (rotation !== 0) {
-    leftShift(input, inputOffset, left, 0, rotation);
-    rightShift(input, inputOffset, right, 0, 64 - rotation);
-    for (let i = 0; i < 8; i++) {
-      output[outputOffset + i] = left[i] | right[i];
-    }
-  }
-
-  return output;
+  return W;
 };
 
 export default rotate;
