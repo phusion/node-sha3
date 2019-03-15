@@ -1,7 +1,8 @@
 declare class Hasher {
     constructor(size?: 224 | 256 | 384 | 512);
 
-    update(data: Buffer | string): this;
+    update(data: Buffer): this;
+    update(data: string, encoding: BufferEncoding): this;
 
     digest(): Buffer;
     digest(encoding: "binary"): Buffer;
