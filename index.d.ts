@@ -11,8 +11,8 @@ declare class Hasher {
     reset(): this;
 }
 
-export class SHA3 extends Hasher { 
-    public static SHA3Hash: typeof Hasher;
+export class SHA3 extends Hasher {
+    static SHA3Hash: typeof Hasher;
 }
 
 export const SHA3Hash: typeof Hasher;
