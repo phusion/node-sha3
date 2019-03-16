@@ -35,12 +35,12 @@
     "@babel/core": "7.1.5",
     "@babel/preset-env": "7.1.5",
     "@babel/register": "7.0.0",
-    "@types/node": "^11.11.3",
+    "@types/node": "11.11.3",
     "babel-eslint": "10.0.1",
     "eslint": "5.9.0",
     "eslint-plugin-ante": "1.0.1",
     "mocha": "5.2.0",
-    "nyc": "^13.3.0"
+    "nyc": "13.3.0"
   },
   "dependencies": {
     "buffer": "5.2.1"
