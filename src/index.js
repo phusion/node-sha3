@@ -8,14 +8,14 @@ const createHash = ({ padding }) => function Hash(size = 512) {
 
   const sponge = new Sponge({ capacity: size, padding });
 
-  this.update = (input) => {
+  this.update = (input, encoding = 'utf8') => {
     if (Buffer.isBuffer(input)) {
       sponge.absorb(input);
       return this;
     }
 
     if (typeof input === 'string') {
-      return this.update(Buffer.from(input, 'utf8'));
+      return this.update(Buffer.from(input, encoding));
     }
 
     throw new TypeError('Not a string or buffer');

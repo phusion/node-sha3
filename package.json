@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "The Keccak family of hashing algorithms.",
   "main": "index.js",
+  "types": "index.d.ts",
   "keywords": [
     "sha",
     "sha3",
@@ -24,7 +25,7 @@
     "test": "test"
   },
   "scripts": {
-    "build": "babel --only '**/index.js' --no-comments --compact true --minified --source-maps false --out-dir lib src; cp -vfR README.md LICENSE package.json yarn.lock lib/",
+    "build": "babel --only '**/index.js' --no-comments --compact true --minified --source-maps false --out-dir lib src; cp -vfR README.md LICENSE package.json yarn.lock index.d.ts lib/",
     "coverage": "nyc report",
     "lint": "eslint src test",
     "test": "nyc --silent --check-coverage --lines 100 --per-file mocha --require @babel/register --recursive test"
@@ -34,11 +35,12 @@
     "@babel/core": "7.1.5",
     "@babel/preset-env": "7.1.5",
     "@babel/register": "7.0.0",
+    "@types/node": "11.11.3",
     "babel-eslint": "10.0.1",
     "eslint": "5.9.0",
     "eslint-plugin-ante": "1.0.1",
     "mocha": "5.2.0",
-    "nyc": "13.1.0"
+    "nyc": "13.3.0"
   },
   "dependencies": {
     "buffer": "5.2.1"
