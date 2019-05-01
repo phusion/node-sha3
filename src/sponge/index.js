@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import permute from './permute';
+import permute from './precomputed-permute';
 
 const allowedCapacityValues = [224, 256, 384, 512];
 

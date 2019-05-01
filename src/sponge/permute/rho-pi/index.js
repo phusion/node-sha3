@@ -4,15 +4,24 @@ import copy from '../copy';
 import rotate from '../rotate';
 
 const rhoPi = ({ A, C, W }) => {
-  copy(A, 1)(W, 0);
+  console.log('// rho-pi');
+  console.log(`W0 = A2;`);
+  console.log(`W1 = A3;`);
 
   for (let i = 0; i < 24; i++) {
     const j = PI_SHUFFLES[i];
     const r = RHO_OFFSETS[i];
 
-    copy(A, j)(C, 0);
-    copy(rotate(W, r), 0)(A, j);
-    copy(C, 0)(W, 0);
+    console.log(`C0 = A${j * 2};`);
+    console.log(`C1 = A${j * 2 + 1};`);
+    console.log('H = W0;');
+    console.log('L = W1;');
+    console.log(`W0 = H << ${r} | L >>> ${32 - r};`);
+    console.log(`W1 = L << ${r} | H >>> ${32 - r};`);
+    console.log(`A${j * 2} = W0;`);
+    console.log(`A${j * 2 + 1} = W1;`);
+    console.log(`W0 = C0;`);
+    console.log(`W1 = C1`);
   }
 };
 

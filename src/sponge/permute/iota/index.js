@@ -1,8 +1,9 @@
 import ROUND_CONSTANTS from './round-constants';
-import xor from '../xor';
 
 const iota = ({ A, roundIndex }) => {
-  xor(A, 0)(A, 0, ROUND_CONSTANTS, roundIndex);
+  console.log('// iota');
+  console.log(`A0 ^= ${ROUND_CONSTANTS[roundIndex * 2]};`);
+  console.log(`A1 ^= ${ROUND_CONSTANTS[roundIndex * 2 + 1]};`);
 };
 
 export default iota;
