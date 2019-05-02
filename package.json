@@ -31,16 +31,16 @@
     "test": "nyc --silent --check-coverage --lines 100 --per-file mocha --require @babel/register --recursive test"
   },
   "devDependencies": {
-    "@babel/cli": "7.1.5",
-    "@babel/core": "7.1.5",
-    "@babel/preset-env": "7.1.5",
-    "@babel/register": "7.0.0",
-    "@types/node": "11.11.3",
+    "@babel/cli": "7.4.4",
+    "@babel/core": "7.4.4",
+    "@babel/preset-env": "7.4.4",
+    "@babel/register": "7.4.4",
+    "@types/node": "11.13.8",
     "babel-eslint": "10.0.1",
-    "eslint": "5.9.0",
-    "eslint-plugin-ante": "1.0.1",
-    "mocha": "5.2.0",
-    "nyc": "13.3.0"
+    "eslint": "5.16.0",
+    "eslint-plugin-ante": "1.0.2",
+    "mocha": "6.1.4",
+    "nyc": "14.1.0"
   },
   "dependencies": {
     "buffer": "5.2.1"
