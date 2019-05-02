@@ -26,6 +26,7 @@
   },
   "scripts": {
     "build": "babel --only '**/index.js' --no-comments --compact true --minified --source-maps false --out-dir lib src; cp -vfR README.md LICENSE package.json yarn.lock index.d.ts lib/",
+    "benchmark": "node benchmark",
     "coverage": "nyc report",
     "lint": "eslint src test",
     "test": "nyc --silent --check-coverage --lines 100 --per-file mocha --require @babel/register --recursive test"

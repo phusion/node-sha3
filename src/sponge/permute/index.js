@@ -3,12 +3,6 @@ import iota from './iota';
 import rhoPi from './rho-pi';
 import theta from './theta';
 
-const reset = (...arrays) => {
-  for (const array of arrays) {
-    array.fill(0);
-  }
-};
-
 const permute = () => {
   // Intermediate variables
   const C = new Uint32Array(10);
@@ -22,7 +16,9 @@ const permute = () => {
       chi({ A, C });
       iota({ A, roundIndex });
     }
-    reset(C, D, W);
+    C.fill(0);
+    D.fill(0);
+    W.fill(0);
   };
 };
 
