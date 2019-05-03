@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/phusion/node-sha3.git"
+    "url": "git://github.com/twuni/sha3.js.git"
   },
   "author": {
     "name": "Devin Canterberry",
