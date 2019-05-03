@@ -1,7 +1,6 @@
 # SHA-3 for JavaScript
 
-[![CircleCI][19]][20]
-[![Travis CI][3]][4]
+[![CircleCI][3]][4]
 [![npm version][5]][6]
 [![npm downloads][7]][6]
 [![dependencies][8]][9]
@@ -198,21 +197,19 @@ for work well done:
 
 [1]: https://keccak.team/keccak.html
 [2]: https://www.phusion.nl/
-[3]: https://img.shields.io/travis/phusion/node-sha3/master.svg?label=Travis%20CI
-[4]: https://travis-ci.org/phusion/node-sha3
+[3]: https://circleci.com/gh/twuni/sha3.js.svg?style=svg
+[4]: https://circleci.com/gh/twuni/sha3.js
 [5]: https://img.shields.io/npm/v/sha3.svg
 [6]: https://www.npmjs.com/package/sha3
 [7]: https://img.shields.io/npm/dt/sha3.svg
-[8]: https://img.shields.io/david/phusion/node-sha3.svg
+[8]: https://img.shields.io/david/twuni/sha3.js.svg
 [9]: https://github.com/twuni/sha3.js/blob/master/package.json
-[10]: https://img.shields.io/david/dev/phusion/node-sha3.svg
-[11]: https://img.shields.io/github/license/phusion/node-sha3.svg
-[12]: https://github.com/phusion/node-sha3/blob/master/LICENSE
+[10]: https://img.shields.io/david/dev/twuni/sha3.js.svg
+[11]: https://img.shields.io/github/license/twuni/sha3.js.svg
+[12]: https://github.com/twuni/sha3.js/blob/master/LICENSE
 [13]: https://www.phusion.nl/images/header/pinwheel_logo.svg
 [14]: http://codahale.com/how-to-safely-store-a-password/
 [15]: https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings
 [16]: https://www.npmjs.com/package/pbkdf2
 [17]: https://keccak.team/keccak_specs_summary.html
 [18]: https://github.com/mjosaarinen/tiny_sha3
-[19]: https://circleci.com/gh/twuni/sha3.js.svg?style=svg
-[20]: https://circleci.com/gh/twuni/sha3.js
