@@ -1,5 +1,6 @@
 # SHA-3 for JavaScript
 
+[![CircleCI][19]][20]
 [![Travis CI][3]][4]
 [![npm version][5]][6]
 [![npm downloads][7]][6]
@@ -213,3 +214,5 @@ for work well done:
 [16]: https://www.npmjs.com/package/pbkdf2
 [17]: https://keccak.team/keccak_specs_summary.html
 [18]: https://github.com/mjosaarinen/tiny_sha3
+[19]: https://circleci.com/gh/phusion/node-sha3.svg?style=svg
+[20]: https://circleci.com/gh/phusion/node-sha3
