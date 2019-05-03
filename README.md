@@ -1,5 +1,6 @@
 # SHA-3 for JavaScript
 
+[![CircleCI][19]][20]
 [![Travis CI][3]][4]
 [![npm version][5]][6]
 [![npm downloads][7]][6]
@@ -12,8 +13,6 @@ A pure JavaScript implementation of the Keccak family of cryptographic hashing a
 > :bulb: **Legacy Note:** In previous versions of this library, the `SHA3Hash` object provided a *Keccak* hash, **not** what we
 > currently know as a SHA-3 hash. For backwards-compatibility, this object is still exported. However, users are encouraged to
 > switch to using the `SHA3` or `Keccak` objects instead, which provide the SHA-3 and Keccak hashing algorithms, respectively.
-
-[![Phusion][13]][2]
 
 ## Installation
 
@@ -195,6 +194,8 @@ for work well done:
 
  * [mjosaarinen/tiny_sha3][18]: Markku-Juhani O. Saarinen's compact, legible, and hackable implementation.
 
+ * [Phusion][13]: For the initial release and maintenance of this project, and gracious hand-off to Twuni for continued development and maintenance.
+
 [1]: https://keccak.team/keccak.html
 [2]: https://www.phusion.nl/
 [3]: https://img.shields.io/travis/phusion/node-sha3/master.svg?label=Travis%20CI
@@ -203,7 +204,7 @@ for work well done:
 [6]: https://www.npmjs.com/package/sha3
 [7]: https://img.shields.io/npm/dt/sha3.svg
 [8]: https://img.shields.io/david/phusion/node-sha3.svg
-[9]: https://github.com/phusion/node-sha3/blob/master/package.json
+[9]: https://github.com/twuni/sha3.js/blob/master/package.json
 [10]: https://img.shields.io/david/dev/phusion/node-sha3.svg
 [11]: https://img.shields.io/github/license/phusion/node-sha3.svg
 [12]: https://github.com/phusion/node-sha3/blob/master/LICENSE
@@ -213,3 +214,5 @@ for work well done:
 [16]: https://www.npmjs.com/package/pbkdf2
 [17]: https://keccak.team/keccak_specs_summary.html
 [18]: https://github.com/mjosaarinen/tiny_sha3
+[19]: https://circleci.com/gh/twuni/sha3.js.svg?style=svg
+[20]: https://circleci.com/gh/twuni/sha3.js
