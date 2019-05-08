@@ -33,7 +33,7 @@ private:
 		SHA3Hash *obj;
 		int32_t hashlen;
 
-		hashlen = info[0]->IsUndefined() ? 512 : info[0]->Int32Value();
+		hashlen = info[0]->IsUndefined() ? 512 : info[0].As<Int32>()->Value();
 		switch (hashlen) {
 			case 224:
 			case 256:
@@ -66,27 +66,31 @@ public:
 
 	static
 	NAN_MODULE_INIT(Init) {
-		Local<FunctionTemplate> t = Nan::New<FunctionTemplate>(New);
-		t->SetClassName(Nan::New<String>("SHA3Hash").ToLocalChecked());
-		t->InstanceTemplate()->SetInternalFieldCount(1);
+		Local<Context> context = target->CreationContext();
 
-		Nan::SetPrototypeMethod(t, "update", Update);
-		Nan::SetPrototypeMethod(t, "digest", Digest);
+		Local<String> className = Nan::New<String>("SHA3Hash").ToLocalChecked();
 
-		constructor.Reset(t->GetFunction());
-		target->Set(Nan::New<String>("SHA3Hash").ToLocalChecked(), t->GetFunction());
+		Local<FunctionTemplate> functionTemplate = Nan::New<FunctionTemplate>(New);
+
+		functionTemplate->SetClassName(className);
+		functionTemplate->InstanceTemplate()->SetInternalFieldCount(1);
+
+		Nan::SetPrototypeMethod(functionTemplate, "update", Update);
+		Nan::SetPrototypeMethod(functionTemplate, "digest", Digest);
+
+		Local<Function> f = functionTemplate->GetFunction(context).ToLocalChecked();
+		constructor.Reset(f);
+		target->Set(className, f);
 	}
 
 	static
 	NAN_METHOD(Update) {
+		Isolate *isolate = info.GetIsolate();
+		Local<Context> context = isolate->GetCurrentContext();
 		SHA3Hash *obj = ObjectWrap::Unwrap<SHA3Hash>(info.This());
 
 		ASSERT_IS_STRING_OR_BUFFER(info[0]);
-#if NODE_VERSION_AT_LEAST(0,11,0)
 		enum Nan::Encoding enc = static_cast<Nan::Encoding>(ParseEncoding(Isolate::GetCurrent(), info[0], node::BINARY));
-#else
-		enum Nan::Encoding enc = static_cast<Nan::Encoding>(ParseEncoding(info[0], node::BINARY));
-#endif
 		ssize_t len = Nan::DecodeBytes(info[0], enc);
 
 		if (len < 0) {
@@ -94,7 +98,7 @@ public:
 		}
 
 		if (Buffer::HasInstance(info[0])) {
-			Local<Object> buffer_obj = info[0]->ToObject();
+			Local<Object> buffer_obj = info[0]->ToObject(context).ToLocalChecked();
 			const char *buffer_data = Buffer::Data(buffer_obj);
 			size_t buffer_length = Buffer::Length(buffer_obj);
 			::Update(&obj->state, (const BitSequence *) buffer_data, buffer_length * 8);
@@ -119,11 +123,7 @@ public:
 		Final(&state2, digest);
 
 		Local<Value> outString;
-#if NODE_VERSION_AT_LEAST(0,11,0)
 		enum Nan::Encoding enc = static_cast<Nan::Encoding>(ParseEncoding(Isolate::GetCurrent(), info[0], node::BINARY));
-#else
-		enum Nan::Encoding enc = static_cast<Nan::Encoding>(ParseEncoding(info[0], node::BINARY));
-#endif
 		if (enc == Nan::HEX) {
 			// Hex encoding
 			char hexdigest[MAX_DIGEST_SIZE * 2];
