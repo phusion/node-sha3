@@ -1,6 +1,6 @@
 {
   "name": "sha3",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "The Keccak family of hashing algorithms.",
   "main": "index.js",
   "types": "index.d.ts",
