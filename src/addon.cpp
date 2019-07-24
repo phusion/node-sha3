@@ -80,7 +80,7 @@ public:
 
 		Local<Function> f = functionTemplate->GetFunction(context).ToLocalChecked();
 		constructor.Reset(f);
-		target->Set(className, f);
+		target->Set(context, className, f).FromJust();
 	}
 
 	static
