@@ -28,9 +28,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "nan": "2.13.2"
+    "nan": "2.14.0"
   },
   "devDependencies": {
-    "mocha": "6.1.4"
+    "mocha": "6.2.0"
   }
 }
