@@ -32,18 +32,18 @@
     "test": "nyc --silent --check-coverage --lines 100 --per-file mocha --require @babel/register --recursive test"
   },
   "devDependencies": {
-    "@babel/cli": "7.5.0",
-    "@babel/core": "7.5.4",
-    "@babel/preset-env": "7.5.4",
-    "@babel/register": "7.4.4",
-    "@types/node": "12.6.2",
-    "babel-eslint": "10.0.2",
-    "eslint": "6.0.1",
-    "eslint-plugin-ante": "1.0.2",
-    "mocha": "6.1.4",
+    "@babel/cli": "7.5.5",
+    "@babel/core": "7.5.5",
+    "@babel/preset-env": "7.5.5",
+    "@babel/register": "7.5.5",
+    "@types/node": "12.7.2",
+    "babel-eslint": "10.0.3",
+    "eslint": "6.2.2",
+    "eslint-plugin-ante": "1.0.3",
+    "mocha": "6.2.0",
     "nyc": "14.1.1"
   },
   "dependencies": {
-    "buffer": "5.2.1"
+    "buffer": "5.4.0"
   }
 }
