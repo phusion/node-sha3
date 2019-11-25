@@ -28,7 +28,7 @@ const readWords = (I, O) => {
 };
 
 // eslint-disable-next-line max-statements
-const Sponge = function({ capacity, padding }) {
+const Sponge = function({ capacity, padding, rounds }) {
   const keccak = permute();
 
   const stateSize = 200;
@@ -46,7 +46,7 @@ const Sponge = function({ capacity, padding }) {
 
       if (queueOffset >= queueSize) {
         xorWords(queue, state);
-        keccak(state);
+        keccak(state, rounds);
         queueOffset = 0;
       }
     }
@@ -75,7 +75,7 @@ const Sponge = function({ capacity, padding }) {
     xorWords(output.queue, output.state);
 
     for (let offset = 0; offset < output.buffer.length; offset += queueSize) {
-      keccak(output.state);
+      keccak(output.state, rounds);
       readWords(output.state, output.buffer.slice(offset, offset + queueSize));
     }
 

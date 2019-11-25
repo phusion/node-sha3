@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer';
 import Sponge from './sponge';
 
-const createHash = ({ allowedSizes, padding }) => function Hash(size = 512) {
+const createHash = ({ allowedSizes, padding, rounds }) => function Hash(size = 512) {
   if (!this || this.constructor !== Hash) {
     return new Hash(size);
   }
@@ -10,7 +10,7 @@ const createHash = ({ allowedSizes, padding }) => function Hash(size = 512) {
     throw new Error('Unsupported hash length');
   }
 
-  const sponge = new Sponge({ capacity: size });
+  const sponge = new Sponge({ capacity: size, rounds });
 
   this.update = (input, encoding = 'utf8') => {
     if (Buffer.isBuffer(input)) {

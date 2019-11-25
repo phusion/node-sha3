@@ -9,8 +9,8 @@ const permute = () => {
   const D = new Uint32Array(10);
   const W = new Uint32Array(2);
 
-  return (A) => {
-    for (let roundIndex = 0; roundIndex < 24; roundIndex++) {
+  return (A, roundCount = 24) => {
+    for (let roundIndex = 0; roundIndex < roundCount; roundIndex++) {
       theta({ A, C, D, W });
       rhoPi({ A, C, W });
       chi({ A, C });
