@@ -1,8 +1,6 @@
 import { Buffer } from 'buffer';
 import permute from './permute';
 
-const allowedCapacityValues = [224, 256, 384, 512];
-
 const xorWords = (I, O) => {
   for (let i = 0; i < I.length; i += 8) {
     const o = i / 4;
@@ -31,15 +29,11 @@ const readWords = (I, O) => {
 
 // eslint-disable-next-line max-statements
 const Sponge = function({ capacity, padding }) {
-  if (!allowedCapacityValues.includes(capacity)) {
-    throw new Error('Unsupported hash length');
-  }
-
   const keccak = permute();
 
   const stateSize = 200;
   const blockSize = capacity / 8;
-  const queueSize = stateSize - blockSize * 2;
+  const queueSize = stateSize - capacity / 4;
   let queueOffset = 0;
 
   const state = new Uint32Array(stateSize / 4);
@@ -64,8 +58,8 @@ const Sponge = function({ capacity, padding }) {
     const output = {
       buffer: options.buffer || Buffer.allocUnsafe(blockSize),
       padding: options.padding || padding,
-      queue: Buffer.allocUnsafe(queueSize),
-      state: new Uint32Array(stateSize / 4)
+      queue: Buffer.allocUnsafe(queue.length),
+      state: new Uint32Array(state.length)
     };
 
     queue.copy(output.queue);
@@ -80,9 +74,9 @@ const Sponge = function({ capacity, padding }) {
 
     xorWords(output.queue, output.state);
 
-    for (let offset = 0; offset < output.buffer.length; offset += blockSize) {
+    for (let offset = 0; offset < output.buffer.length; offset += queueSize) {
       keccak(output.state);
-      readWords(output.state, output.buffer.slice(offset, offset + blockSize));
+      readWords(output.state, output.buffer.slice(offset, offset + queueSize));
     }
 
     return output.buffer;
