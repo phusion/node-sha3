@@ -3,19 +3,18 @@ import permute from './permute';
 
 const allowedCapacityValues = [224, 256, 384, 512];
 
-const writeState = (I, O) => {
+const xorWords = (I, O) => {
   for (let i = 0; i < I.length; i += 8) {
     const o = i / 4;
     O[o] ^= I[i + 7] << 24 | I[i + 6] << 16 | I[i + 5] << 8 | I[i + 4];
     O[o + 1] ^= I[i + 3] << 24 | I[i + 2] << 16 | I[i + 1] << 8 | I[i];
   }
+  return O;
 };
 
 // eslint-disable-next-line max-statements
-const readHash = (I, n) => {
-  const O = Buffer.allocUnsafe(n);
-
-  for (let o = 0; o < n; o += 8) {
+const readWords = (I, O) => {
+  for (let o = 0; o < O.length; o += 8) {
     const i = o / 4;
     O[o] = I[i + 1];
     O[o + 1] = I[i + 1] >>> 8;
@@ -39,8 +38,8 @@ const Sponge = function({ capacity, padding }) {
   const keccak = permute();
 
   const stateSize = 200;
-  const hashSize = capacity / 8;
-  const queueSize = stateSize - hashSize * 2;
+  const blockSize = capacity / 8;
+  const queueSize = stateSize - blockSize * 2;
   let queueOffset = 0;
 
   const state = new Uint32Array(stateSize / 4);
@@ -52,7 +51,7 @@ const Sponge = function({ capacity, padding }) {
       queueOffset += 1;
 
       if (queueOffset >= queueSize) {
-        writeState(queue, state);
+        xorWords(queue, state);
         keccak(state);
         queueOffset = 0;
       }
@@ -60,8 +59,11 @@ const Sponge = function({ capacity, padding }) {
     return this;
   };
 
-  this.squeeze = () => {
+  // eslint-disable-next-line max-statements
+  this.squeeze = (options = {}) => {
     const output = {
+      buffer: options.buffer || Buffer.allocUnsafe(blockSize),
+      padding: options.padding || padding,
       queue: Buffer.allocUnsafe(queueSize),
       state: new Uint32Array(stateSize / 4)
     };
@@ -73,13 +75,17 @@ const Sponge = function({ capacity, padding }) {
 
     output.queue.fill(0, queueOffset);
 
-    output.queue[queueOffset] |= padding;
+    output.queue[queueOffset] |= output.padding;
     output.queue[queueSize - 1] |= 0x80;
 
-    writeState(output.queue, output.state);
-    keccak(output.state);
+    xorWords(output.queue, output.state);
 
-    return readHash(output.state, hashSize);
+    for (let offset = 0; offset < output.buffer.length; offset += blockSize) {
+      keccak(output.state);
+      readWords(output.state, output.buffer.slice(offset, offset + blockSize));
+    }
+
+    return output.buffer;
   };
 
   this.reset = () => {

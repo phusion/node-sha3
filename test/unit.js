@@ -93,6 +93,15 @@ Object.keys(Algorithms).forEach((algorithm) => {
         assert.ok(Buffer.isBuffer(new Hash().digest()));
       });
 
+      it('returns a string when given named options with format of "hex"', () => {
+        assert.equal('string', typeof new Hash(512).digest({ format: 'hex' }));
+      });
+
+      it('returns the given buffer provided as a named option', () => {
+        const buffer = Buffer.alloc(64);
+        assert.equal(buffer, new Hash(512).digest({ buffer }));
+      });
+
       it('throws an error when given a bad value for encoding', () => {
         assert.throws(() => new Hash().digest('not-a-real-encoding'), 'TypeError: Unsupported output encoding');
       });

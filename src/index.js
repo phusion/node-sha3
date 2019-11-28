@@ -6,7 +6,7 @@ const createHash = ({ padding }) => function Hash(size = 512) {
     return new Hash(size);
   }
 
-  const sponge = new Sponge({ capacity: size, padding });
+  const sponge = new Sponge({ capacity: size });
 
   this.update = (input, encoding = 'utf8') => {
     if (Buffer.isBuffer(input)) {
@@ -21,11 +21,17 @@ const createHash = ({ padding }) => function Hash(size = 512) {
     throw new TypeError('Not a string or buffer');
   };
 
-  this.digest = (format = 'binary') => {
-    const buffer = sponge.squeeze();
-    if (format && format !== 'binary') {
-      return buffer.toString(format);
+  this.digest = (formatOrOptions = 'binary') => {
+    const options = typeof formatOrOptions === 'string' ? { format: formatOrOptions } : formatOrOptions;
+    const buffer = sponge.squeeze({
+      buffer: options.buffer,
+      padding: options.padding || padding
+    });
+
+    if (options.format && options.format !== 'binary') {
+      return buffer.toString(options.format);
     }
+
     return buffer;
   };
 
