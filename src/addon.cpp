@@ -22,8 +22,16 @@ static void toHex(const char *data_buf, size_t size, char *output);
 
 class SHA3Hash: public ObjectWrap {
 private:
-	SHA3Hash()
-	{}
+
+	static constexpr size_t state_buf_size = sizeof(hashState) + std::alignment_of<hashState>::value - 1;
+	char state_buf[state_buf_size];
+
+	SHA3Hash() {
+		void* buf = reinterpret_cast<void*>(state_buf);
+		size_t buf_size = state_buf_size;
+		void* aligned_buf = std::align(std::alignment_of<hashState>::value, sizeof(hashState), buf, buf_size);
+		state = new(aligned_buf) hashState();
+	}
 
 	~SHA3Hash()
 	{}
@@ -49,7 +57,7 @@ private:
 			obj = new SHA3Hash();
 			obj->Wrap(info.This());
 			obj->bitlen = hashlen;
-			::Init(&obj->state, hashlen);
+			::Init(obj->state, hashlen);
 			info.GetReturnValue().Set(info.This());
 		} else {
 			// Invoked as a plain function.
@@ -61,7 +69,7 @@ private:
 	}
 
 public:
-	hashState state;
+	hashState* state;
 	int32_t bitlen;
 
 	static
@@ -101,12 +109,12 @@ public:
 			Local<Object> buffer_obj = info[0]->ToObject(context).ToLocalChecked();
 			const char *buffer_data = Buffer::Data(buffer_obj);
 			size_t buffer_length = Buffer::Length(buffer_obj);
-			::Update(&obj->state, (const BitSequence *) buffer_data, buffer_length * 8);
+			::Update(obj->state, (const BitSequence *) buffer_data, buffer_length * 8);
 		} else {
 			char *buf = new char[len];
 			ssize_t written = Nan::DecodeWrite(buf, len, info[0], enc);
 			assert(written == len);
-			::Update(&obj->state, (const BitSequence *) buf, len * 8);
+			::Update(obj->state, (const BitSequence *) buf, len * 8);
 			delete[] buf;
 		}
 
@@ -119,7 +127,7 @@ public:
 		hashState state2;
 		unsigned char digest[MAX_DIGEST_SIZE];
 
-		memcpy(&state2, &obj->state, sizeof(hashState));
+		memcpy(&state2, obj->state, sizeof(hashState));
 		Final(&state2, digest);
 
 		Local<Value> outString;
