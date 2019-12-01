@@ -57,6 +57,7 @@ FIPS-compatible interfaces for the following algorithms:
 
  * `SHA3`: The SHA3 algorithm.
  * `Keccak`: The Keccak algorithm.
+ * `SHAKE`: The SHAKE XOF algorithm.
 
 > :bulb: **Legacy Note:** Savvy inspectors may notice that `SHA3Hash` is also provided. Prior to v2.0.0,
 > this library only implemented an early version of the SHA3 algorithm. Since then, SHA3 has diverged from
@@ -85,6 +86,17 @@ const hash = new Keccak(256);
 
 hash.update('foo');
 hash.digest('hex');
+```
+
+#### Generating a SHAKE128 hash with 2048 bytes
+
+```javascript
+import { SHAKE } from 'sha3';
+
+const hash = new SHAKE(128);
+
+hash.update('foo');
+hash.digest({ buffer: Buffer.alloc(2048), format: 'hex' });
 ```
 
 ### API Reference
@@ -143,11 +155,30 @@ hash.update('hello');
 
 hash.digest('hex');
 // => hash of 'hello' as a hex-encoded string
+```
 
-hash.update('we can keep reading data even after digesting');
+#### `#digest([options={}])`
 
-hash.digest();
-// => hash of everything so far as a Buffer object
+Digests the hash and returns the result. After calling this function, the hash **may** continue to receive input.
+
+Options include:
+
+ * `buffer` (Buffer): **Optional.** A pre-allocated buffer to fill with output bytes. This is how XOF algorithms like SHAKE can be used to obtain an arbitrary number of hash bytes.
+ * `format` (string): **Optional.** The encoding to use for the returned digest. Defaults to `'binary'`. If `buffer` is also provided, this value will passed directly into `Buffer#toString()` on the given buffer.
+ * `padding` (byte): **Optional.** Override the padding used to pad the input bytes to the algorithm's block size. Typically this should be omitted, but may be required if building additional cryptographic algorithms on top of this library.
+
+If a `format` is provided and is a value other than `'binary'`, then this function returns a `string`.
+Otherwise, it returns a `Buffer`.
+
+##### Example
+
+```javascript
+const hash = new Keccak(256);
+
+hash.update('hello');
+
+hash.digest({ buffer: Buffer.alloc(32), format: 'hex' });
+// => hash of 'hello' as a hex-encoded string
 ```
 
 #### `#reset()`
