@@ -66,8 +66,6 @@ public:
 
 	static
 	NAN_MODULE_INIT(Init) {
-		Local<Context> context = target->CreationContext();
-
 		Local<String> className = Nan::New<String>("SHA3Hash").ToLocalChecked();
 
 		Local<FunctionTemplate> functionTemplate = Nan::New<FunctionTemplate>(New);
@@ -78,9 +76,9 @@ public:
 		Nan::SetPrototypeMethod(functionTemplate, "update", Update);
 		Nan::SetPrototypeMethod(functionTemplate, "digest", Digest);
 
-		Local<Function> f = functionTemplate->GetFunction(context).ToLocalChecked();
+		Local<Function> f = Nan::GetFunction(functionTemplate).ToLocalChecked();
 		constructor.Reset(f);
-		target->Set(className, f);
+		Nan::Set(target, className, f);
 	}
 
 	static
