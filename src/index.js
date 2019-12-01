@@ -1,12 +1,16 @@
 import { Buffer } from 'buffer';
 import Sponge from './sponge';
 
-const createHash = ({ padding }) => function Hash(size = 512) {
+const createHash = ({ allowedSizes, padding }) => function Hash(size = 512) {
   if (!this || this.constructor !== Hash) {
     return new Hash(size);
   }
 
-  const sponge = new Sponge({ capacity: size, padding });
+  if (allowedSizes && !allowedSizes.includes(size)) {
+    throw new Error('Unsupported hash length');
+  }
+
+  const sponge = new Sponge({ capacity: size });
 
   this.update = (input, encoding = 'utf8') => {
     if (Buffer.isBuffer(input)) {
@@ -21,11 +25,17 @@ const createHash = ({ padding }) => function Hash(size = 512) {
     throw new TypeError('Not a string or buffer');
   };
 
-  this.digest = (format = 'binary') => {
-    const buffer = sponge.squeeze();
-    if (format && format !== 'binary') {
-      return buffer.toString(format);
+  this.digest = (formatOrOptions = 'binary') => {
+    const options = typeof formatOrOptions === 'string' ? { format: formatOrOptions } : formatOrOptions;
+    const buffer = sponge.squeeze({
+      buffer: options.buffer,
+      padding: options.padding || padding
+    });
+
+    if (options.format && options.format !== 'binary') {
+      return buffer.toString(options.format);
     }
+
     return buffer;
   };
 
@@ -47,7 +57,7 @@ const createHash = ({ padding }) => function Hash(size = 512) {
  *
  * @see {@link https://keccak.team/files/Keccak-reference-3.0.pdf}, Section 1.1.2
  */
-const Keccak = createHash({ padding: 0x01 });
+const Keccak = createHash({ allowedSizes: [224, 256, 384, 512], padding: 0x01 });
 
 /**
  * The SHA-3 specification requires that the input message be appended with a
@@ -59,7 +69,9 @@ const Keccak = createHash({ padding: 0x01 });
  *
  * @see {@link https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf}, Section B.2
  */
-const SHA3 = createHash({ padding: 0x06 });
+const SHA3 = createHash({ allowedSizes: [224, 256, 384, 512], padding: 0x06 });
+
+const SHAKE = createHash({ allowedSizes: [128, 256], padding: 0x1F });
 
 /**
  * Provided for historical purposes. This is an alias for the *Keccak* algorithm,
@@ -77,7 +89,7 @@ const SHA3Hash = Keccak;
 SHA3.SHA3Hash = SHA3Hash;
 
 // Named exports for all hashes included by this library.
-export { Keccak, SHA3, SHA3Hash };
+export { Keccak, SHA3, SHA3Hash, SHAKE };
 
 // Make the default export useful as-is.
 export default SHA3;
