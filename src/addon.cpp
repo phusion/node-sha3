@@ -26,10 +26,15 @@ private:
 	static constexpr size_t state_buf_size = sizeof(hashState) + std::alignment_of<hashState>::value - 1;
 	char state_buf[state_buf_size];
 
+	// remove this function in favor of std::align once gcc 5.1 is the minimal required compiler version
+	void* align(size_t alignment, size_t size, void*& ptr, size_t& space) {
+		return reinterpret_cast<char*>(reinterpret_cast<size_t>(static_cast<char*>(ptr) + (alignment - 1)) & (~alignment + 1));
+	}
+
 	SHA3Hash() {
 		void* buf = reinterpret_cast<void*>(state_buf);
 		size_t buf_size = state_buf_size;
-		void* aligned_buf = std::align(std::alignment_of<hashState>::value, sizeof(hashState), buf, buf_size);
+		void* aligned_buf = align(std::alignment_of<hashState>::value, sizeof(hashState), buf, buf_size);
 		state = new(aligned_buf) hashState();
 	}
 
