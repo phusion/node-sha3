@@ -19,4 +19,6 @@ export const SHA3Hash: typeof Hasher;
 
 export const Keccak: typeof Hasher;
 
+export const SHAKE: typeof Hasher;
+
 export default SHA3;
