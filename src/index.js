@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer';
 import Sponge from './sponge';
 
-const createHash = ({ allowedSizes, padding }) => function Hash(size = 512) {
+const createHash = ({ allowedSizes, defaultSize, padding }) => function Hash(size = defaultSize) {
   if (!this || this.constructor !== Hash) {
     return new Hash(size);
   }
@@ -51,13 +51,13 @@ const createHash = ({ allowedSizes, padding }) => function Hash(size = 512) {
  * The Keccak reference implementation uses the simplest possible padding scheme,
  * described as follows:
  *
- * > Definition 1. Multi-rate padding, denoted by pad10\∗1, appends a single bit 1
+ * > Definition 1. Multi-rate padding, denoted by pad10*1, appends a single bit 1
  * > followed by the minimum number of bits 0 followed by a single bit 1 such that
  * > the length of the result is a multiple of the block length.
  *
  * @see {@link https://keccak.team/files/Keccak-reference-3.0.pdf}, Section 1.1.2
  */
-const Keccak = createHash({ allowedSizes: [224, 256, 384, 512], padding: 0x01 });
+const Keccak = createHash({ allowedSizes: [224, 256, 384, 512], defaultSize: 512, padding: 0x01 });
 
 /**
  * The SHA-3 specification requires that the input message be appended with a
@@ -69,9 +69,9 @@ const Keccak = createHash({ allowedSizes: [224, 256, 384, 512], padding: 0x01 })
  *
  * @see {@link https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf}, Section B.2
  */
-const SHA3 = createHash({ allowedSizes: [224, 256, 384, 512], padding: 0x06 });
+const SHA3 = createHash({ allowedSizes: [224, 256, 384, 512], defaultSize: 512, padding: 0x06 });
 
-const SHAKE = createHash({ allowedSizes: [128, 256], padding: 0x1F });
+const SHAKE = createHash({ allowedSizes: [128, 256], defaultSize: 256, padding: 0x1F });
 
 /**
  * Provided for historical purposes. This is an alias for the *Keccak* algorithm,
