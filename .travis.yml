@@ -1,9 +1,10 @@
 language: node_js
 
 node_js:
-  - '14.5.0'
-  - '12.18.2'
-  - '10.21.0'
+  - '15.7.0'
+  - '14.15.4'
+  - '12.20.1'
+  - '10.23.2'
 
 notifications:
   email: false
