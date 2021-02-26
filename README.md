@@ -39,6 +39,9 @@ const { SHA3 } = require('sha3');
 
 // The Keccak hash function is also available
 const { Keccak } = require('sha3');
+
+// The SHAKE extendable output function (XOF) is also available
+const { SHAKE } = require('sha3');
 ```
 
 ### ES6
@@ -49,6 +52,9 @@ import { SHA3 } from 'sha3';
 
 // The Keccak hash function is also available
 import { Keccak } from 'sha3';
+
+// The SHAKE extendable output function (XOF) is also available
+import { SHAKE } from 'sha3';
 ```
 
 ### What's in the box
