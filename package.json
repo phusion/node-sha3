@@ -28,6 +28,7 @@
     "build": "babel --only '**/index.js' --no-comments --compact true --minified --source-maps false --out-dir lib src; cp -vfR README.md LICENSE package.json yarn.lock index.d.ts lib/",
     "benchmark": "node benchmark",
     "coverage": "nyc report",
+    "docs": "jsdoc --package package.json --pedantic --readme README.md src --destination docs",
     "lint": "eslint src test",
     "test": "nyc --silent --check-coverage --lines 100 --per-file mocha --require @babel/register --recursive test"
   },
@@ -40,6 +41,7 @@
     "babel-eslint": "10.1.0",
     "eslint": "7.18.0",
     "eslint-plugin-ante": "1.0.4",
+    "jsdoc": "3.6.6",
     "mocha": "8.2.1",
     "nyc": "15.1.0"
   },
