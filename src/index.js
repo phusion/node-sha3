@@ -71,6 +71,12 @@ const Keccak = createHash({ allowedSizes: [224, 256, 384, 512], defaultSize: 512
  */
 const SHA3 = createHash({ allowedSizes: [224, 256, 384, 512], defaultSize: 512, padding: 0x06 });
 
+/**
+ * SHAKE is an 128-bit or 256-bit extendable output function (XOF) variant of
+ * Keccak that uses `0x1F` padding. (SHAKE = Secure Hash Algorithm KEccak)
+ *
+ * @see {@link https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf}, Section 6.3
+ */
 const SHAKE = createHash({ allowedSizes: [128, 256], defaultSize: 256, padding: 0x1F });
 
 /**
