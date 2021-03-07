@@ -6,7 +6,7 @@ const createHash = ({ allowedSizes, defaultSize, padding }) => function Hash(siz
     return new Hash(size);
   }
 
-  if (allowedSizes && !allowedSizes.includes(size)) {
+  if (allowedSizes && allowedSizes.indexOf(size) < 0) {
     throw new Error('Unsupported hash length');
   }
 
