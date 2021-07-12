@@ -58,6 +58,12 @@ export const SHA3Hash: typeof Keccak;
  */
 export class Keccak<S extends 224 | 256 | 384 | 512 = 512> extends Hasher<S> {}
 
+/**
+ * SHAKE is an 128-bit or 256-bit extendable output function (XOF) variant of
+ * Keccak that uses `0x1F` padding. (SHAKE = Secure Hash Algorithm KEccak)
+ *
+ * @see {@link https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf}, Section 6.3
+ */
 export class SHAKE<S extends 128 | 256 = 256> extends Hasher<S> {}
 
 export default SHA3;
