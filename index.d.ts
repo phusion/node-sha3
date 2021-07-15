@@ -27,7 +27,7 @@ declare interface DigestOptions<T> {
  * Then, the standard Keccak padding scheme is applied (pad10*1), placing an
  * additional bit at the `0x04` position, resulting in `0x06`.
  *
- * https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf, Section B.2
+ * @see {@link https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf}, Section B.2
  */
 export class SHA3<S extends 224 | 256 | 384 | 512 = 512> extends Hasher<S> {
     /**
@@ -54,10 +54,16 @@ export const SHA3Hash: typeof Keccak;
  * > followed by the minimum number of bits 0 followed by a single bit 1 such that
  * > the length of the result is a multiple of the block length.
  *
- * https://keccak.team/files/Keccak-reference-3.0.pdf, Section 1.1.2
+ * @see {@link https://keccak.team/files/Keccak-reference-3.0.pdf}, Section 1.1.2
  */
 export class Keccak<S extends 224 | 256 | 384 | 512 = 512> extends Hasher<S> {}
 
+/**
+ * SHAKE is an 128-bit or 256-bit extendable output function (XOF) variant of
+ * Keccak that uses `0x1F` padding. (SHAKE = Secure Hash Algorithm KEccak)
+ *
+ * @see {@link https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf}, Section 6.3
+ */
 export class SHAKE<S extends 128 | 256 = 256> extends Hasher<S> {}
 
 export default SHA3;
