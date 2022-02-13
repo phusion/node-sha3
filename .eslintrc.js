@@ -15,6 +15,7 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: [
+    'eslint-plugin-ante'
   ],
   rules: {
     'no-magic-numbers': ['off'],
