@@ -4,11 +4,9 @@ module.exports = {
     node: true
   },
   extends: [
-    'eslint:recommended',
-    'plugin:ante/recommended',
-    'plugin:ante/style'
+    'eslint:recommended'
   ],
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaFeatures: {
       experimentalObjectRestSpread: true
